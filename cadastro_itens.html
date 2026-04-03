@@ -11,57 +11,101 @@
     <title>Cucaria</title>
 </head>
 
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const toggle = document.querySelector(".menu-toggle i");
+        const menu = document.querySelector("#menu");
+        const overlay = document.querySelector(".overlay");
+
+        function toggleMenu() {
+            menu.classList.toggle("active");
+            overlay.classList.toggle("active");
+
+            if (menu.classList.contains("active")) {
+                toggle.classList.remove("fa-bars");
+                toggle.classList.add("fa-xmark");
+                toggle.parentElement.classList.add("active");
+                document.body.classList.add("menu-open");
+            } else {
+                toggle.classList.remove("fa-xmark");
+                toggle.classList.add("fa-bars");
+                toggle.parentElement.classList.remove("active");
+                document.body.classList.remove("menu-open");
+            }
+        }
+
+        toggle.parentElement.addEventListener("click", toggleMenu);
+        overlay.addEventListener("click", toggleMenu);
+
+    });
+</script>
+
 <body>
-    <div align="center" class="titulo">
+    <div class="titulo">
         <img src="img/logo.jpg.jpg" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
-    <div align="center" class="nav">
+    <div class="nav">
+        <div class="menu-toggle">
+            <i class="fa-solid fa-bars"></i>
+        </div>
+
+        <div class="overlay"></div>
+
         <nav>
-            <ul>
-                <i class="fa-solid fa-clipboard-check"></i>
-                <li><a href="#pedidos">Pedidos</a></li>
-
-                <i class="bi bi-box-seam-fill"></i>
-                <li><a href="#produtos">Produtos</a></li>
-
-                <i class="bi bi-graph-up"></i>
-                <li><a href="#dashboard">Dashboard</a></li>
-
-                <i class="fa-solid fa-utensils"></i>
-                <li><a href="#cardapio">Cardápio</a></li>
+            <ul id="menu">
+                <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+                <li><a href="#produtos" class="active"><i class="bi bi-box-seam-fill"></i>Produtos</a></li>
+                <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
+                <li><a href="#cardapio"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
             </ul>
         </nav>
-    </div>
 
-    <div class="container">
-        <h1>Cadastro Produto</h1>
-        <h3>Preencha os dados do novo produto</h3>
+        <div class="container">
+            <h1><i class="fa-solid fa-plus"></i> Cadastrar Produto</h1>
+            <h3>Preencha os dados do novo produto</h3>
+            <div class="form-grid">
+                <div class="campo">
+                    <label for="nome">
+                        <i class="bi bi-box-seam-fill"></i>
+                        Nome do Produto*
+                    </label>
+                    <input type="text" placeholder="Ex: Dois amores" id="nome" name="nome" required>
+                </div>
 
-        <i class="bi bi-box-seam-fill"></i>
-        <label for="nome">Nome do Produto*</label><br>
+                <div class="campo">
+                    <label for="preco">
+                        <i class="bi bi-currency-dollar"></i>
+                        Preço de Venda (R$)*
+                    </label>
+                    <input type="number" placeholder="0,00" id="preco" name="preco" step="0.01" required>
+                </div>
 
-        <input type="text" placeholder="Ex: Dois amores" id="nome" name="nome" required>
+                <div class="campo">
+                    <label for="preco_producao">
+                        <i class="bi bi-currency-dollar"></i>
+                        Preço de Produção (R$)*
+                    </label>
+                    <input type="number" placeholder="0,00" id="preco_producao" name="preco_producao" step="0.01"
+                        required>
+                </div>
 
-        <br><br>
+                <div class="campo full">
+                    <label for="descricao">
+                        <i class="bi bi-file-earmark-text-fill"></i>
+                        Descrição
+                    </label>
+                    <textarea id="descricao" placeholder="Descreva o produto..." rows="4" required></textarea>
+                </div>
 
-        <i class="bi bi-currency-dollar"></i>
-        <label for="preco">Preço de Venda(R$)*</label><br>
-        <input type="number" placeholder="0,00" id="preco" name="preco" step="0.01" required><br><br>
-
-        <i class="bi bi-currency-dollar"></i>
-        <label for="preco_producao">Preço de Produção(R$)*</label><br>
-        <input type="number" placeholder="0,00" id="preco_producao" name="preco_producao" step="0.01" required><br><br>
-
-        <i class="bi bi-file-earmark-text-fill"></i>
-        <label for="descricao">Descrição</label><br>
-        <textarea id="descricao" placeholder="Descreva o produto..." rows="4" cols="50" required></textarea><br><br>
-
-        <input type="submit" value="Cadastrar Produto">
-
-        </form>
-    </div>
+            </div>
+            <button type="submit">
+                <i class="fa-solid fa-plus"></i>
+                Cadastrar Produto
+            </button>
+        </div>
 
 </body>
 
