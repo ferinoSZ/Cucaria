@@ -16,6 +16,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 body.menu-open {
@@ -130,6 +131,13 @@ body.menu-open {
     border: 1px solid #d0c7ba;
     background: #ece6dc;
     font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus,
+textarea:focus {
+    border-color: #b87082;
+    outline: none;
 }
 
 .container textarea {
@@ -214,7 +222,7 @@ body.menu-open {
     z-index: 1000;
 }
 
-/*nav mobile*/
+
 @media (max-width: 600px) {
 
     .menu-toggle {
