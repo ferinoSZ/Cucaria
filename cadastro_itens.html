@@ -17,6 +17,8 @@
         const toggle = document.querySelector(".menu-toggle i");
         const menu = document.querySelector("#menu");
         const overlay = document.querySelector(".overlay");
+        const inputImagem = document.getElementById("imagem");
+        const preview = document.getElementById("preview");
 
         function toggleMenu() {
             menu.classList.toggle("active");
@@ -37,6 +39,23 @@
 
         toggle.parentElement.addEventListener("click", toggleMenu);
         overlay.addEventListener("click", toggleMenu);
+
+        if (inputImagem && preview) {
+            inputImagem.addEventListener("change", (event) => {
+                const file = event.target.files && event.target.files[0];
+
+                if (!file) {
+                    preview.removeAttribute("src");
+                    preview.classList.remove("visible");
+                    return;
+                }
+
+                const objectUrl = URL.createObjectURL(file);
+                preview.src = objectUrl;
+                preview.classList.add("visible");
+                preview.onload = () => URL.revokeObjectURL(objectUrl);
+            });
+        }
 
     });
 </script>
@@ -98,6 +117,15 @@
                         Descrição
                     </label>
                     <textarea id="descricao" placeholder="Descreva o produto..." rows="4" required></textarea>
+                </div>
+
+                <div class="campo full">
+                    <label class="upload-label">
+                        <i class="bi bi-image"></i>
+                        Selecionar imagem
+                        <input type="file" id="imagem" accept="image/*" hidden>
+                    </label>
+                    <img id="preview" src="" alt="Prévia da imagem">
                 </div>
 
             </div>
