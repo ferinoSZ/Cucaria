@@ -85,6 +85,16 @@ input:focus {
     border-color: #b87082;
 }
 
+.voltar {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    color: #b87082;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
 button {
     background-color:#c88194;;
     color: #ffffff;
