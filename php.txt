@@ -1,0 +1,38 @@
+<?php
+// 1. Importa o autoload do Composer
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+$mail = new PHPMailer(true);
+
+try {
+    // --- CONFIGURAÇÕES DO SERVIDOR SMTP ---
+    $mail->isSMTP();
+    $mail->Host       = 'smtp.gmail.com';
+    $mail->SMTPAuth   = true;
+    
+    // SEUS DADOS AQUI:
+    $mail->Username   = 'seu-email@gmail.com';         // Seu e-mail do Gmail
+    $mail->Password   = 'abcd efgh ijkl mnop';         // A SENHA DE 16 DÍGITOS (sem espaços)
+    
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
+    $mail->Port       = 587;
+
+    // --- REMETENTE E DESTINATÁRIO ---
+    $mail->setFrom('seu-email@gmail.com', 'Teste Localhost');
+    $mail->addAddress('seu-email@gmail.com');          // Envie para você mesmo para testar
+
+    // --- CONTEÚDO DO E-MAIL ---
+    $mail->isHTML(true);
+    $mail->Subject = 'Funciona! Teste de SMTP';
+    $mail->Body    = '<h1>Sucesso!</h1><p>Se você recebeu isso, o PHPMailer está configurado corretamente no seu XAMPP.</p>';
+    $mail->AltBody = 'Sucesso! O PHPMailer está configurado corretamente.';
+
+    $mail->send();
+    echo '<b style="color: green;">E-mail enviado com sucesso! Verifique sua caixa de entrada (e a pasta de Spam).</b>';
+
+} catch (Exception $e) {
+    echo "<b style="color: red;">Erro ao enviar o e-mail: {$mail->ErrorInfo}</b>";
+}
