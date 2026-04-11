@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ama Cucaria - Redefinir Senha</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="esqueceu_senha.css"> <!-- Mesmo css da página de esqueceu_senha pois a estrutura é similar -->
+</head>
+
+<body>
+
+    <div class="titulo">
+        <img src="img/logo.jpg.jpg" alt="Logo">
+        <h1>Ama Cucaria</h1>
+    </div>
+
+    <div class="container">
+        <h1>Criar Nova Senha</h1>
+        <h3>Digite sua nova senha abaixo para acessar sua conta.</h3>
+
+        <form action="../api/processa_redefinicao.php" method="POST" class="container-login">
+            
+            <input type="hidden" name="token" id="tokenValue">
+
+            <div class="campo">
+                <label>Nova Senha</label>
+                <input type="password" name="nova_senha" placeholder="Digite a nova senha" required>
+            </div>
+            
+            <br>
+
+            <div class="campo">
+                <label>Confirmar Nova Senha</label>
+                <input type="password" name="confirma_senha" placeholder="Confirme a nova senha" required>
+            </div>
+
+            <button type="submit">Salvar nova senha</button>
+
+            <a href="login.html" class="voltar">Voltar para login</a>
+
+        </form>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        
+        if(token) {
+            document.getElementById('tokenValue').value = token;
+        } else {
+            alert("Erro: O link de recuperação é inválido ou está incompleto.");
+        }
+    </script>
+
+</body>
+
+</html>
