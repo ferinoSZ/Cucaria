@@ -15,7 +15,7 @@ try {
     
     // SEUS DADOS AQUI:
     $mail->Username   = 'seu-email@gmail.com';         // Seu e-mail do Gmail
-    $mail->Password   = 'abcd efgh ijkl mnop';         // A SENHA DE 16 DÍGITOS (sem espaços)
+    $mail->Password   = '';         // A SENHA DE 16 DÍGITOS (sem espaços)
     
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
     $mail->Port       = 587;
