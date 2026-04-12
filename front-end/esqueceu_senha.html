@@ -1,15 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ama Cucaria - Cadastro</title>
+    <title>Ama Cucaria - Recuperar Senha</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="esqueceu_senha.css">
-    </style>
 </head>
-
 <body>
 
     <div class="titulo">
@@ -17,18 +14,48 @@
         <h1>Ama Cucaria</h1>
     </div>
 
+    <p style="text-align: center; font-size: 16px; margin-bottom: 20px; color: #555; font-weight: 600;">
+        Digite seu email para receber um link de recuperação.
+    </p>
+
+    <div id="caixa-mensagem" class="mensagem-alerta"></div>
+
     <form action="../api/processa_recuperacao.php" method="POST" class="container-login">
-            <div class="campo">
-                <label>Email</label>
-                <input type="email" name="email" placeholder="Digite seu email" required>
-            </div>
+        <div class="campo">
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Digite seu email" required>
+        </div>
 
-            <button type="submit" class="btn">Enviar link</button>
+        <button type="submit" class="btn">Enviar link</button>
 
-            <a href="login.html" class="voltar">Voltar para login</a>
+        <a href="login.html" class="voltar">Voltar para login</a>
     </form>
 
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const sucesso = urlParams.get('sucesso');
+        const erro = urlParams.get('erro');
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+
+        if (sucesso == 'email_enviado') {
+            caixaMensagem.classList.add('sucesso');
+            caixaMensagem.innerText = 'E-mail enviado com sucesso! Verifique sua caixa de entrada.';
+        } else if (erro == 'usuario_nao_encontrado') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'E-mail não encontrado em nossa base de dados.';
+        } else if (erro == 'falha_envio') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Erro ao enviar o e-mail. Entre em contato com o responsável pelo sistema.';
+        }
+
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
+    </script>
 
 </body>
-
 </html>

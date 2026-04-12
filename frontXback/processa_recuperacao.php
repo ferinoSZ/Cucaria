@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail = configurarEmail();
             
             // Quem está enviando (use o mesmo e-mail da configuração)
-            $mail->setFrom('kaue.univillegsr@gmail.com', 'Ama Cucaria');
+            $mail->setFrom('amacucariasitema@gmail.com', 'Ama Cucaria');
             
             // Quem vai receber
             $mail->addAddress($email);

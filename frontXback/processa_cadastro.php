@@ -17,7 +17,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // 2. Criptografia (O coração da segurança do seu sistema)
     $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
     // 3. Chama o Model para salvar no banco

@@ -21,7 +21,9 @@
         <h1>Login</h1>
         <h3>Preencha os dados para acessar sua conta</h3>
 
-        <form action="../api/processa_login.php" method="POST">
+        <div id="caixa-mensagem" class="mensagem-alerta"></div>
+
+        <form action="../frontXback/processa_login.php" method="POST">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -58,6 +60,47 @@
         </form>
 
     </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const erro = urlParams.get('erro');
+        const sucesso = urlParams.get('sucesso');
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+
+        // 1. Primeiro verifica se existe ALGUM erro
+        if (erro) {
+            // Pinta a caixinha de vermelho
+            caixaMensagem.classList.add('erro');
+            
+            // 2. Depois verifica QUAL é o erro
+            if (erro == 'credenciais_invalidas') {
+                caixaMensagem.innerText = 'E-mail ou senha inválidos!';
+            } else {
+                caixaMensagem.innerText = 'Ocorreu um erro. Tente novamente.';
+            }
+            
+        // 3. Se não tem erro, verifica se tem SUCESSO
+        } else if (sucesso) {
+            // Pinta a caixinha de verde
+            caixaMensagem.classList.add('sucesso');
+            
+            if (sucesso === 'cadastro_realizado') {
+                caixaMensagem.innerText = 'Cadastro realizado com sucesso! Faça seu login.';
+            } else if (sucesso === 'senha_atualizada') {
+                caixaMensagem.innerText = 'Nova senha salva! Faça seu login.';
+            }
+        }
+
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
+    </script>
+
+
 
 </body>
 

@@ -20,7 +20,9 @@
         <h1>Cadastrar Usuário</h1>
         <h3>Preencha os dados para criar uma nova conta</h3>
 
-       <form action="../api/processa_cadastro.php" method="POST">
+        <div id="caixa-mensagem" class="mensagem-alerta"></div>
+
+       <form action="../frontXback/processa_cadastro.php" method="POST">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -74,6 +76,32 @@
         </form>
 
     </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const erro = urlParams.get('erro');
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+
+        if (erro) {
+            caixaMensagem.classList.add('erro');
+            if (erro == 'senhas_nao_conferem') {
+                caixaMensagem.innerText = 'As senhas digitadas não são iguais!';
+            } else if (erro == 'email_em_uso') {
+                caixaMensagem.innerText = 'Este e-mail já está cadastrado!';
+            } else {
+                caixaMensagem.innerText = 'Ocorreu um erro no cadastro.';
+            }
+        }
+
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
+    </script>
+
 
 </body>
 

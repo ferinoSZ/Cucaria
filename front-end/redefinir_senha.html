@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ama Cucaria - Redefinir Senha</title>
+    <title>Ama Cucaria - Nova Senha</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="esqueceu_senha.css"> <!-- Mesmo css da página de esqueceu_senha pois a estrutura é similar -->
+    <link rel="stylesheet" href="esqueceu_senha.css"> 
 </head>
-
 <body>
 
     <div class="titulo">
@@ -16,44 +14,60 @@
         <h1>Ama Cucaria</h1>
     </div>
 
-    <div class="container">
-        <h1>Criar Nova Senha</h1>
-        <h3>Digite sua nova senha abaixo para acessar sua conta.</h3>
+    <p style="text-align: center; font-size: 16px; margin-bottom: 20px; color: #555; font-weight: 600;">
+        Crie uma nova senha segura para a sua conta.
+    </p>
 
-        <form action="../api/processa_redefinicao.php" method="POST" class="container-login">
-            
-            <input type="hidden" name="token" id="tokenValue">
+    <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-            <div class="campo">
-                <label>Nova Senha</label>
-                <input type="password" name="nova_senha" placeholder="Digite a nova senha" required>
-            </div>
-            
-            <br>
+    <form action="../frontXback/processa_redefinicao.php" method="POST" class="container-login">
+        
+        <input type="hidden" name="token" id="tokenValue">
 
-            <div class="campo">
-                <label>Confirmar Nova Senha</label>
-                <input type="password" name="confirma_senha" placeholder="Confirme a nova senha" required>
-            </div>
+        <div class="campo">
+            <label>Nova Senha</label>
+            <input type="password" name="nova_senha" placeholder="Digite sua nova senha" required>
+        </div>
 
-            <button type="submit">Salvar nova senha</button>
+        <div class="campo">
+            <label>Confirmar Senha</label>
+            <input type="password" name="confirma_senha" placeholder="Repita a nova senha" required>
+        </div>
 
-            <a href="login.html" class="voltar">Voltar para login</a>
-
-        </form>
-    </div>
+        <button type="submit" class="btn">Salvar nova senha</button>
+    </form>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
+        const erro = urlParams.get('erro');
         const token = urlParams.get('token');
-        
-        if(token) {
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+
+        // 1. Pega o token da URL e coloca no campo oculto do formulário
+        if (token) {
             document.getElementById('tokenValue').value = token;
-        } else {
-            alert("Erro: O link de recuperação é inválido ou está incompleto.");
         }
+
+        // 2. Verifica se o PHP devolveu algum erro
+        if (erro == 'senhas_diferentes') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'As senhas digitadas não são iguais!';
+        } else if (erro == 'token_invalido') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'O link de recuperação é inválido ou já expirou.';
+        } else if (erro == 'erro_atualizacao') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Erro no servidor ao salvar a senha. Tente novamente.';
+        }
+
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
     </script>
 
 </body>
-
 </html>

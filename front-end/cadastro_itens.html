@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cucaria - Cadastrar Produto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="cadastro_itens.css">
+</head>
+<body>
+
+    <div class="titulo">
+        <img src="img/logo.jpg.jpg" alt="Logo">
+        <h1>Ama Cucaria</h1>
+    </div>
+
+    <div class="container">
+        <a href="cardapio.html" class="btn-voltar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+
+        <h1><i class="fa-solid fa-plus"></i> Cadastrar Produto</h1>
+        <h3>Preencha os dados do novo produto</h3>
+
+        <div id="caixa-mensagem" class="mensagem-alerta"></div>
+
+        <form action="../frontXback/processa_produto.php" method="POST" enctype="multipart/form-data">
+            <div class="form-grid">
+                
+                <div class="campo">
+                    <label for="nome"><i class="bi bi-box-seam-fill"></i> Nome do Produto*</label>
+                    <input type="text" placeholder="Ex: Dois amores" id="nome" name="nome" required>
+                </div>
+
+                <div class="campo">
+                    <label for="preco"><i class="bi bi-currency-dollar"></i> Preço de Venda (R$)*</label>
+                    <input type="number" placeholder="0,00" id="preco" name="preco" step="0.01" required>
+                </div>
+
+                <div class="campo">
+                    <label for="preco_producao"><i class="bi bi-currency-dollar"></i> Preço de Produção (R$)*</label>
+                    <input type="number" placeholder="0,00" id="preco_producao" name="preco_producao" step="0.01" required>
+                </div>
+
+                <div class="campo full">
+                    <label for="descricao"><i class="bi bi-file-earmark-text-fill"></i> Descrição</label>
+                    <textarea id="descricao" name="descricao" placeholder="Descreva o produto..." rows="4" required></textarea>
+                </div>
+
+                <div class="campo full">
+                    <label class="upload-label">
+                        <i class="bi bi-image"></i> Selecionar imagem
+                        <input type="file" id="imagem" name="imagem" accept="image/*" hidden>
+                    </label>
+                    <img id="preview" src="" alt="Prévia da imagem">
+                </div>
+
+            </div>
+            
+            <button type="submit">
+                <i class="fa-solid fa-plus"></i> Cadastrar Produto
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // 1. SCRIPT DE PREVIEW DA IMAGEM
+        document.addEventListener("DOMContentLoaded", () => {
+            const inputImagem = document.getElementById("imagem");
+            const preview = document.getElementById("preview");
+
+            if (inputImagem && preview) {
+                inputImagem.addEventListener("change", (event) => {
+                    const file = event.target.files && event.target.files[0];
+                    if (!file) {
+                        preview.removeAttribute("src");
+                        preview.classList.remove("visible");
+                        return;
+                    }
+                    const objectUrl = URL.createObjectURL(file);
+                    preview.src = objectUrl;
+                    preview.classList.add("visible");
+                    preview.onload = () => URL.revokeObjectURL(objectUrl);
+                });
+            }
+        });
+
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const sucesso = urlParams.get('sucesso');
+        const erro = urlParams.get('erro');
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+
+        if (sucesso == 'produto_cadastrado') {
+            caixaMensagem.classList.add('sucesso');
+            caixaMensagem.innerText = 'Produto cadastrado com sucesso!';
+        } else if (erro == 'falha_upload') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Erro ao salvar a imagem no servidor.';
+        } else if (erro == 'formato_invalido') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Formato de imagem inválido. Use JPG, PNG ou WEBP.';
+        }else if (erro == 'imagem_obrigatoria') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'A imagem do produto é obrigatória.';
+        } else if (erro == 'erro_banco') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Erro ao salvar produto no banco de dados.';
+        }
+
+        // Limpa a URL sem recarregar a página
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
+        // 3. VALIDAÇÃO ANTES DE ENVIAR O FORMULÁRIO
+        const formulario = document.querySelector('form');
+        
+        formulario.addEventListener('submit', function(event) {
+            const inputImagem = document.getElementById("imagem");
+            
+            // Verifica se o usuário não selecionou nenhum arquivo
+            if (inputImagem.files.length === 0) {
+                event.preventDefault(); // Cancela o envio do formulário
+                
+                // Limpa as classes de sucesso (caso existam) e mostra o erro
+                caixaMensagem.className = 'mensagem-alerta erro'; 
+                caixaMensagem.innerText = 'É obrigatório anexar uma foto do produto!';
+                
+                // Rola a tela para o topo para a pessoa ver a mensagem
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        });
+
+    </script>
+</body>
+</html>
+

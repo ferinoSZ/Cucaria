@@ -8,7 +8,6 @@ require_once '../back-end/Sessao.php';
 // 2. Verifica se os dados realmente vieram via formulário POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
-    // Captura os dados do formulário de forma segura
     $email = trim($_POST['email']);
     $senha = trim($_POST['senha']);
 
@@ -31,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
     } else {
-        // Se falhar, volta pro login com um erro na URL (para podermos exibir no HTML depois)
+       
         header("Location: ../front-end/login.html?erro=credenciais_invalidas");
         exit();
     }
