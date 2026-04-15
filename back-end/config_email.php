@@ -13,7 +13,7 @@ function configurarEmail() {
     $mail->Host       = 'smtp.gmail.com';
     $mail->SMTPAuth   = true;
     $mail->Username   = 'amacucariasistema@gmail.com';        
-    $mail->Password   = 'gvyaffkllqqmjexd';         
+    $mail->Password   = '';         
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; 
     $mail->Port       = 587;
 
