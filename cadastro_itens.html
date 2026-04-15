@@ -11,84 +11,19 @@
     <title>Cucaria</title>
 </head>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-
-        const toggle = document.querySelector(".menu-toggle i");
-        const menu = document.querySelector("#menu");
-        const overlay = document.querySelector(".overlay");
-        const inputImagem = document.getElementById("imagem");
-        const preview = document.getElementById("preview");
-
-        function toggleMenu() {
-            menu.classList.toggle("active");
-            overlay.classList.toggle("active");
-
-            if (menu.classList.contains("active")) {
-                toggle.classList.remove("fa-bars");
-                toggle.classList.add("fa-xmark");
-                toggle.parentElement.classList.add("active");
-                document.body.classList.add("menu-open");
-            } else {
-                toggle.classList.remove("fa-xmark");
-                toggle.classList.add("fa-bars");
-                toggle.parentElement.classList.remove("active");
-                document.body.classList.remove("menu-open");
-            }
-        }
-
-        toggle.parentElement.addEventListener("click", toggleMenu);
-        overlay.addEventListener("click", toggleMenu);
-
-        if (inputImagem && preview) {
-            inputImagem.addEventListener("change", (event) => {
-                const file = event.target.files && event.target.files[0];
-
-                if (!file) {
-                    preview.removeAttribute("src");
-                    preview.classList.remove("visible");
-                    return;
-                }
-
-                const objectUrl = URL.createObjectURL(file);
-                preview.src = objectUrl;
-                preview.classList.add("visible");
-                preview.onload = () => URL.revokeObjectURL(objectUrl);
-            });
-        }
-
-    });
-</script>
-
 <body>
     <div class="titulo">
         <img src="img/logo.jpg.jpg" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
-    <div class="nav">
-        <div class="menu-toggle">
-            <i class="fa-solid fa-bars"></i>
-        </div>
+    <div class="container">
+        <h1><i class="fa-solid fa-plus"></i> Cadastrar Produto</h1>
+        <h3>Preencha os dados do novo produto</h3>
 
-        <div class="overlay"></div>
 
-        <nav>
-            <ul id="menu">
-                <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
-                <li><a href="#produtos" class="active"><i class="bi bi-box-seam-fill"></i>Produtos</a></li>
-                <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
-                <li><a href="#cardapio"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
-            </ul>
-        </nav>
-
-        <div class="container">
-            <h1><i class="fa-solid fa-plus"></i> Cadastrar Produto</h1>
-            <h3>Preencha os dados do novo produto</h3>
-
-             
-            <form action="#" method="POST">
-                <div class="form-grid">
+        <form action="#" method="POST" enctype="multipart/form-data">
+            <div class="form-grid">
                 <div class="campo">
                     <label for="nome">
                         <i class="bi bi-box-seam-fill"></i>
@@ -131,14 +66,35 @@
                     <img id="preview" src="" alt="Prévia da imagem">
                 </div>
 
-                </div>
-                <button type="submit">
-                    <i class="fa-solid fa-plus"></i>
-                    Cadastrar Produto
-                </button>
-            </form>
-        </div>
+            </div>
+            <button type="submit" class="botao">
+                <i class="fa-solid fa-plus"></i>
+                Cadastrar Produto
+            </button>
+        </form>
+    </div>
 
+    <script>
+        const imagemInput = document.getElementById('imagem');
+        const preview = document.getElementById('preview');
+
+        imagemInput.addEventListener('change', function () {
+            const arquivo = this.files && this.files[0];
+
+            if (!arquivo) {
+                preview.src = '';
+                preview.classList.remove('visible');
+                return;
+            }
+
+            const leitor = new FileReader();
+            leitor.onload = function (evento) {
+                preview.src = evento.target.result;
+                preview.classList.add('visible');
+            };
+            leitor.readAsDataURL(arquivo);
+        });
+    </script>
 </body>
 
 </html>
