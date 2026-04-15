@@ -73,28 +73,6 @@
             </button>
         </form>
     </div>
-
-    <script>
-        const imagemInput = document.getElementById('imagem');
-        const preview = document.getElementById('preview');
-
-        imagemInput.addEventListener('change', function () {
-            const arquivo = this.files && this.files[0];
-
-            if (!arquivo) {
-                preview.src = '';
-                preview.classList.remove('visible');
-                return;
-            }
-
-            const leitor = new FileReader();
-            leitor.onload = function (evento) {
-                preview.src = evento.target.result;
-                preview.classList.add('visible');
-            };
-            leitor.readAsDataURL(arquivo);
-        });
-    </script>
 </body>
 
 </html>
