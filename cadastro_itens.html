@@ -73,6 +73,29 @@
             </button>
         </form>
     </div>
+    <script>
+        const imagemInput = document.getElementById('imagem');
+        const preview = document.getElementById('preview');
+
+        imagemInput.addEventListener('change', function () {
+            const arquivo = this.files && this.files[0];
+
+            if (!arquivo) {
+                preview.src = '';
+                preview.classList.remove('visible');
+                return;
+            }
+
+            if (preview.dataset.objectUrl) {
+                URL.revokeObjectURL(preview.dataset.objectUrl);
+            }
+
+            const objectUrl = URL.createObjectURL(arquivo);
+            preview.src = objectUrl;
+            preview.dataset.objectUrl = objectUrl;
+            preview.classList.add('visible');
+        });
+    </script>
 </body>
 
 </html>
