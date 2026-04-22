@@ -71,5 +71,55 @@ class Produto {
             return false;
         }
     }
+
+    public static function editar($conn, $id, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url) {
+        try {
+            $sql = "UPDATE produtos 
+                    SET nome = ?, preco_venda = ?, preco_producao = ?, descricao = ?, imagem_url = ?
+                    WHERE id = ?";
+    
+            $stmt = $conn->prepare($sql);
+    
+            if (!$stmt) {
+                error_log("Erro SQL: " . $conn->error);
+                return false;
+            }
+    
+            $stmt->bind_param("sddssi", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $id);
+    
+            $resultado = $stmt->execute();
+            $stmt->close();
+    
+            return $resultado;
+    
+        } catch (Exception $e) {
+            error_log("Erro ao editar produto: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function excluir($conn, $id) {
+        try {
+            $sql = "DELETE FROM produtos WHERE id = ?";
+    
+            $stmt = $conn->prepare($sql);
+    
+            if (!$stmt) {
+                error_log("Erro SQL: " . $conn->error);
+                return false;
+            }
+    
+            $stmt->bind_param("i", $id);
+    
+            $resultado = $stmt->execute();
+            $stmt->close();
+    
+            return $resultado;
+    
+        } catch (Exception $e) {
+            error_log("Erro ao excluir produto: " . $e->getMessage());
+            return false;
+        }
+    }
 }
 ?>
