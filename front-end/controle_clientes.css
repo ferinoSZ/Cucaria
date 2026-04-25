@@ -1,0 +1,233 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-color: #f3efe6;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    color: #4b372f;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.titulo img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.titulo h1 {
+    color: #4b372f;
+    font-size: 24px;
+}
+
+.container-admin {
+    width: 100%;
+    max-width: 1000px; 
+    background-color: #faf8f5;
+    border: 1px solid #d7cec2;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    padding: 30px;
+}
+
+.container-admin h2 {
+    font-size: 1.4rem;
+    color: #4b372f;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #e2dcd0;
+    padding-bottom: 10px;
+}
+
+.tabela-wrapper {
+    overflow-x: auto; 
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    background-color: transparent;
+}
+
+thead th {
+    text-align: left;
+    padding: 15px 10px;
+    color: #b87082;
+    font-weight: 700;
+    border-bottom: 2px solid #e2dcd0;
+}
+
+tbody td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #e2dcd0;
+    color: #4b372f;
+    font-weight: 600;
+}
+
+tbody tr:hover {
+    background-color: rgba(184, 112, 130, 0.04);
+}
+
+.col-nome {
+    min-width: 150px;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d7cec2; 
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .slider {
+    background-color: #c88194; 
+}
+
+input:checked + .slider:before {
+    transform: translateX(20px);
+}
+
+.btn-excluir {
+    background-color: transparent;
+    color: #8c7f7a;
+    border: 1px solid #d7cec2;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-excluir:hover {
+    background-color: #dc3545; 
+    color: white;
+    border-color: #dc3545;
+}
+
+.modal-overlay {
+    display: none; /* Escondido por padrão */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semi-transparente */
+    z-index: 1000; /* Fica por cima de tudo no site */
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px); /* Desfoque suave no fundo (opcional) */
+}
+
+.modal-box {
+    background-color: #f3efe6; /* Cor do fundo do seu site (creme) */
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #d7cec2;
+    text-align: center;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: deslizarCima 0.3s ease-out; /* Efeito de entrada suave */
+}
+
+.modal-titulo {
+    color: #b87082; /* Rosa Ama Cucaria */
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 700;
+}
+
+.modal-texto {
+    color: #4b372f; /* Marrom Cacau */
+    font-size: 16px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.modal-botoes {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Ajuste para telas pequenas */
+}
+
+.btn-modal {
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 130px;
+}
+
+.btn-confirmar {
+    background-color: #c88194;
+    color: #ffffff;
+}
+
+.btn-confirmar:hover {
+    background-color: #b57485;
+}
+
+.btn-cancelar {
+    background-color: transparent;
+    color: #4b372f;
+    border: 1px solid #d7cec2;
+}
+
+.btn-cancelar:hover {
+    background-color: #e2dcd0;
+    border-color: #e2dcd0;
+}
+
+@keyframes deslizarCima {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+

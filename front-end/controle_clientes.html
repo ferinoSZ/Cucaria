@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ama Cucaria - Controle de Clientes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="controle_clientes.css">
+</head>
+
+<body>
+
+    <div class="titulo">
+        <img src="img/logoNew.png" alt="Logo">
+        <h1>Ama Cucaria</h1>
+    </div>
+
+    <div class="container-admin">
+        <h2>Clientes Cadastrados</h2>
+        
+        <div class="tabela-wrapper">
+            <table id="tabela-clientes">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>VIP</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="modal-confirmacao" class="modal-overlay">
+        <div class="modal-box">
+            <h2 class="modal-titulo">Atenção!</h2>
+            <p id="texto-confirmacao" class="modal-texto">Sua mensagem de confirmação vai aqui.</p>
+            
+            <div class="modal-botoes">
+                <button id="btn-confirmar-exclusao" class="btn-modal btn-confirmar">Sim, Excluir</button>
+                <button class="btn-modal btn-cancelar" onclick="fecharModalConfirmacao()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        async function carregarClientes() {
+            try {
+                const resposta = await fetch('../API/controle_clientes.php');
+                const clientes = await resposta.json();
+                
+                const corpoTabela = document.querySelector('#tabela-clientes tbody');
+                corpoTabela.innerHTML = ''; 
+                clientes.forEach(cliente => {
+                    const isVip = cliente.cliente_vip == 1 ? 'checked' : '';
+
+                    corpoTabela.innerHTML += `
+                        <tr>
+                            <td class="col-nome">${cliente.nome}</td>
+                            <td>${cliente.email}</td>
+                            <td>
+                                <label class="switch">
+                                    <input type="checkbox" ${isVip} onchange="alternarVip(${cliente.id}, this.checked)">
+                                    <span class="slider"></span>
+                                </label>
+                            </td>
+                            <td>
+                                <button class="btn-excluir" onclick="excluirUsuario(${cliente.id}, '${cliente.nome}')">Excluir</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (erro) {
+                console.error("Erro ao carregar a tabela:", erro);
+                alert("Erro ao buscar clientes. Verifique sua conexão ou a API.");
+            }
+        }
+
+        async function alternarVip(idUsuario, statusVip) {
+            try {
+                await fetch('../API/controle_clientes.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'toggleVip', id: idUsuario, vip: statusVip })
+                });
+            } catch (erro) {
+                alert("Erro ao atualizar o status VIP.");
+                carregarClientes(); 
+            }
+        }
+        const modal = document.getElementById('modal-confirmacao');
+        const textoConfirmacao = document.getElementById('texto-confirmacao');
+        const btnConfirmar = document.getElementById('btn-confirmar-exclusao');
+
+        function excluirUsuario(idUsuario, nomeUsuario) {
+            btnConfirmar.dataset.id = idUsuario; 
+            
+            textoConfirmacao.innerHTML = `Tem certeza que deseja excluir permanentemente o cliente <strong>${nomeUsuario}</strong>?`;
+            modal.style.display = 'flex';
+        }
+
+        function fecharModalConfirmacao() {
+            modal.style.display = 'none';
+        }
+
+        btnConfirmar.addEventListener('click', async function() {
+
+            const idUsuario = this.dataset.id; 
+
+            if (!idUsuario) return;
+
+            fecharModalConfirmacao(); 
+
+            try {
+                const resposta = await fetch('../API/controle_clientes.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ acao: 'excluir', id: idUsuario })
+                });
+                
+                const resultado = await resposta.json();
+
+                if (resultado.sucesso) {
+                    carregarClientes();
+                } else {
+                    alert("Erro ao excluir: " + resultado.erro);
+                }
+            } catch (erro) {
+                console.error("Erro na comunicação com a API:", erro);
+                alert("Erro de conexão ao tentar excluir.");
+            }
+        });
+        document.addEventListener('DOMContentLoaded', carregarClientes);
+    </script>
+
+</body>
+</html>
+

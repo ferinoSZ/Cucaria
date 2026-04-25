@@ -4,16 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ama Cucaria - Cadastro</title>
+    <title>Ama Cucaria - Login</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="login.css">
-    </style>
 </head>
 
 <body>
 
     <div class="titulo">
-        <img src="img/logo.jpg.jpg" alt="Logo">
+        <img src="img/logoNew.png" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
@@ -23,7 +22,7 @@
 
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-        <form action="../frontXback/processa_login.php" method="POST">
+        <form action="../API/processa_login.php" method="POST">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -35,7 +34,6 @@
                     </label>
                     <input type="email" name="email" placeholder="Ex: maria@exemplo.com" required>
                 </div>
-                
                 <div class="input-group">
                     <label>
                         <svg viewBox="0 0 24 24">
@@ -47,48 +45,58 @@
                 </div>
             </div>
 
-            <a href="esqueceu_senha.html" class="link">Esqueceu sua senha?</a>
+            <div class="lembrar">
+                <input type="checkbox" id="lembrar" name="lembrar">
+                <label for="lembrar">Lembrar de mim</label>
+
+                <a href="esqueceu_senha.html" class="link">Esqueceu sua senha?</a>
+            </div>
 
             <button type="submit">
                 Fazer Login
             </button>
-           
-            <a href="cadastro.html" class="btn-secundario">
-                Cadastrar-se
-            </a>
 
+            <a href="cadastro.html" class="cadastro">Não tem uma conta? Cadastre-se</a>
         </form>
-
     </div>
 
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const erro = urlParams.get('erro');
-        const sucesso = urlParams.get('sucesso');
-        const caixaMensagem = document.getElementById('caixa-mensagem');
+    <div id="popup-sucesso" class="modal-overlay">
+        <div class="modal-box">
+            <h2 style="color: #b87082; margin-bottom: 10px;">Sucesso!</h2>
+            <p id="texto-popup">Sua mensagem vai aparecer aqui.</p>
+            <button class="btn-modal" onclick="fecharPopup()">Entendi</button>
+        </div>
+    </div>
 
-        // 1. Primeiro verifica se existe ALGUM erro
-        if (erro) {
-            // Pinta a caixinha de vermelho
+    
+
+<script> 
+        const urlParams = new URLSearchParams(window.location.search);
+        const sucesso = urlParams.get('sucesso');
+        const erro = urlParams.get('erro');
+        
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+        const popup = document.getElementById('popup-sucesso');
+        const textoPopup = document.getElementById('texto-popup');
+
+        if (sucesso == 'cadastro_realizado') {
+            textoPopup.innerText = 'Cadastro efetuado com sucesso! Digite seu e-mail e senha para efetuar o login.';
+            popup.style.display = 'flex';
+        } else if (sucesso == 'senha_atualizada') { 
+            textoPopup.innerText = 'Redefinição efetuada com sucesso! Digite seu e-mail e sua nova senha para efetuar o login.';
+            popup.style.display = 'flex';
+        }
+
+        if (erro == 'credenciais_invalidas') {
             caixaMensagem.classList.add('erro');
-            
-            // 2. Depois verifica QUAL é o erro
-            if (erro == 'credenciais_invalidas') {
-                caixaMensagem.innerText = 'E-mail ou senha inválidos!';
-            } else {
-                caixaMensagem.innerText = 'Ocorreu um erro. Tente novamente.';
-            }
-            
-        // 3. Se não tem erro, verifica se tem SUCESSO
-        } else if (sucesso) {
-            // Pinta a caixinha de verde
-            caixaMensagem.classList.add('sucesso');
-            
-            if (sucesso === 'cadastro_realizado') {
-                caixaMensagem.innerText = 'Cadastro realizado com sucesso! Faça seu login.';
-            } else if (sucesso === 'senha_atualizada') {
-                caixaMensagem.innerText = 'Nova senha salva! Faça seu login.';
-            }
+            caixaMensagem.innerText = 'E-mail ou senha incorretos. Verifique e tente novamente.';
+        } else if (erro == 'login_necessario') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Por favor, faça login para acessar o sistema.';
+        }
+
+        function fecharPopup() {
+            popup.style.display = 'none';
         }
 
         if (window.history.replaceState) {
@@ -98,9 +106,24 @@
             window.history.replaceState(null, '', urlLimpa);
         }
 
+        const campoEmail = document.querySelector('input[name="email"]');
+        const checkboxLembrar = document.getElementById('lembrar');
+        const formLogin = document.querySelector('form');
+
+        const emailSalvo = localStorage.getItem('cucaria_email_lembrar');
+        if (emailSalvo) {
+            campoEmail.value = emailSalvo;
+            checkboxLembrar.checked = true;
+        }
+
+        formLogin.addEventListener('submit', function() {
+            if (checkboxLembrar.checked) {
+                localStorage.setItem('cucaria_email_lembrar', campoEmail.value);
+            } else {
+                localStorage.removeItem('cucaria_email_lembrar');
+            }
+        });
     </script>
-
-
 
 </body>
 

@@ -11,7 +11,7 @@
 <body>
 
     <div class="titulo">
-        <img src="img/logo.jpg.jpg" alt="Logo">
+        <img src="img/logoNew.png" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
@@ -23,7 +23,7 @@
 
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-        <form action="../frontXback/processa_produto.php" method="POST" enctype="multipart/form-data">
+        <form action="../API/processa_produto.php" method="POST" enctype="multipart/form-data">
             <div class="form-grid">
                 
                 <div class="campo">
@@ -63,7 +63,6 @@
     </div>
 
     <script>
-        // 1. SCRIPT DE PREVIEW DA IMAGEM
         document.addEventListener("DOMContentLoaded", () => {
             const inputImagem = document.getElementById("imagem");
             const preview = document.getElementById("preview");
@@ -84,7 +83,6 @@
             }
         });
 
-        
         const urlParams = new URLSearchParams(window.location.search);
         const sucesso = urlParams.get('sucesso');
         const erro = urlParams.get('erro');
@@ -107,7 +105,6 @@
             caixaMensagem.innerText = 'Erro ao salvar produto no banco de dados.';
         }
 
-        // Limpa a URL sem recarregar a página
         if (window.history.replaceState) {
             const urlLimpa = new URL(window.location);
             urlLimpa.searchParams.delete('erro');
@@ -115,21 +112,15 @@
             window.history.replaceState(null, '', urlLimpa);
         }
 
-        // 3. VALIDAÇÃO ANTES DE ENVIAR O FORMULÁRIO
         const formulario = document.querySelector('form');
         
         formulario.addEventListener('submit', function(event) {
             const inputImagem = document.getElementById("imagem");
             
-            // Verifica se o usuário não selecionou nenhum arquivo
-            if (inputImagem.files.length === 0) {
-                event.preventDefault(); // Cancela o envio do formulário
-                
-                // Limpa as classes de sucesso (caso existam) e mostra o erro
+            if (inputImagem.files.length == 0) {
+                event.preventDefault(); 
                 caixaMensagem.className = 'mensagem-alerta erro'; 
                 caixaMensagem.innerText = 'É obrigatório anexar uma foto do produto!';
-                
-                // Rola a tela para o topo para a pessoa ver a mensagem
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         });

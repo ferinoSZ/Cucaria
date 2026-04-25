@@ -1,12 +1,10 @@
 <?php
 
-class Produto {
-    // Método para cadastrar um novo produto no banco
+class produto {
     public static function cadastrar($conn, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url) {
         try {
             $sql = "INSERT INTO produtos (nome, preco_venda, preco_producao, descricao, imagem_url, ativo) 
                     VALUES (?, ?, ?, ?, ?, 1)";
-            
             $stmt = $conn->prepare($sql);
             
             if (!$stmt) {
@@ -14,12 +12,10 @@ class Produto {
                 return false;
             }
 
-            // "sddss" significa: String, Double, Double, String, String
             $stmt->bind_param("sddss", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url);
-
             $resultado = $stmt->execute();
             $stmt->close();
-            
+
             return $resultado;
         } catch (Exception $e) {
             error_log("Erro ao cadastrar produto: " . $e->getMessage());
@@ -27,7 +23,6 @@ class Produto {
         }
     }
 
-    // Método para listar os produtos (usaremos no Cardápio e na Gestão)
     public static function listarTodos($conn, $apenasAtivos = false) {
         try {
             $sql = "SELECT * FROM produtos";
@@ -35,11 +30,9 @@ class Produto {
                 $sql .= " WHERE ativo = 1";
             }
             $sql .= " ORDER BY nome ASC";
-
             $resultado = $conn->query($sql);
 
             if ($resultado) {
-                // Retorna um array com todos os produtos
                 return $resultado->fetch_all(MYSQLI_ASSOC);
             }
             return [];
@@ -49,7 +42,6 @@ class Produto {
         }
     }
 
-    // Método para ativar ou desativar um produto (a regra que você pediu)
     public static function mudarStatus($conn, $id, $status) {
         try {
             $sql = "UPDATE produtos SET ativo = ? WHERE id = ?";
@@ -59,9 +51,7 @@ class Produto {
                 return false;
             }
 
-            // "ii" significa: Integer, Integer
             $stmt->bind_param("ii", $status, $id);
-
             $resultado = $stmt->execute();
             $stmt->close();
             

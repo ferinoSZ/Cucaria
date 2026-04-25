@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,29 +8,33 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="esqueceu_senha.css">
 </head>
+
 <body>
 
     <div class="titulo">
-        <img src="img/logo.jpg.jpg" alt="Logo">
+        <img src="img/logoNew.png" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
-    <p style="text-align: center; font-size: 16px; margin-bottom: 20px; color: #555; font-weight: 600;">
-        Digite seu email para receber um link de recuperação.
-    </p>
+    <div class="container">
+        <h1>Esqueceu sua senha?</h1>
+        <h3>Digite seu email e enviaremos um link para redefinir sua senha.</h3>
 
-    <div id="caixa-mensagem" class="mensagem-alerta"></div>
+        <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-    <form action="../api/processa_recuperacao.php" method="POST" class="container-login">
-        <div class="campo">
-            <label>Email</label>
-            <input type="email" name="email" placeholder="Digite seu email" required>
-        </div>
+        <form action="../API/processa_recuperacao.php" method="POST" class="container-login">
+            
+            <div class="campo">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Digite seu email" required>
+            </div>
 
-        <button type="submit" class="btn">Enviar link</button>
+            <button type="submit" class="btn">Enviar link</button>
 
-        <a href="login.html" class="voltar">Voltar para login</a>
-    </form>
+            <a href="login.html" class="voltar">Voltar para login</a>
+
+        </form>
+    </div>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
@@ -39,13 +44,13 @@
 
         if (sucesso == 'email_enviado') {
             caixaMensagem.classList.add('sucesso');
-            caixaMensagem.innerText = 'E-mail enviado com sucesso! Verifique sua caixa de entrada.';
-        } else if (erro == 'usuario_nao_encontrado') {
+            caixaMensagem.innerText = 'Link de recuperação enviado para o seu email!';
+        } else if (erro == 'email_nao_encontrado') {
             caixaMensagem.classList.add('erro');
-            caixaMensagem.innerText = 'E-mail não encontrado em nossa base de dados.';
-        } else if (erro == 'falha_envio') {
+            caixaMensagem.innerText = 'Não encontramos nenhuma conta com este email.';
+        } else if (erro == 'erro_servidor') {
             caixaMensagem.classList.add('erro');
-            caixaMensagem.innerText = 'Erro ao enviar o e-mail. Entre em contato com o responsável pelo sistema.';
+            caixaMensagem.innerText = 'Erro ao enviar o email. Tente novamente mais tarde.';
         }
 
         if (window.history.replaceState) {
@@ -54,8 +59,8 @@
             urlLimpa.searchParams.delete('sucesso');
             window.history.replaceState(null, '', urlLimpa);
         }
-
     </script>
 
 </body>
+
 </html>

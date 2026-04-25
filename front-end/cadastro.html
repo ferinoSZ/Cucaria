@@ -12,7 +12,7 @@
 <body>
 
     <div class="titulo">
-        <img src="img/logo.jpg.jpg" alt="Logo">
+        <img src="img/logoNew.png" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
@@ -22,7 +22,7 @@
 
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-       <form action="../frontXback/processa_cadastro.php" method="POST">
+       <form action="../API/processa_cadastro.php" method="POST">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -80,14 +80,16 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const erro = urlParams.get('erro');
+        const sucesso = urlParams.get('sucesso'); 
         const caixaMensagem = document.getElementById('caixa-mensagem');
 
+        
         if (erro) {
             caixaMensagem.classList.add('erro');
             if (erro == 'senhas_nao_conferem') {
                 caixaMensagem.innerText = 'As senhas digitadas não são iguais!';
             } else if (erro == 'email_em_uso') {
-                caixaMensagem.innerText = 'Este e-mail já está cadastrado!';
+                caixaMensagem.innerText = 'Este e-mail não pode ser cadastrado!';
             } else {
                 caixaMensagem.innerText = 'Ocorreu um erro no cadastro.';
             }
@@ -99,9 +101,7 @@
             urlLimpa.searchParams.delete('sucesso');
             window.history.replaceState(null, '', urlLimpa);
         }
-
     </script>
-
 
 </body>
 

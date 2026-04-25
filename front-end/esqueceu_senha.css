@@ -3,6 +3,7 @@
     margin: 0;
     padding: 0;
     font-family: 'Nunito', sans-serif;
+
 }
 
 body {
@@ -36,10 +37,18 @@ body {
     padding: 32px;
     width: 30%;
     max-width: 800px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
     border-radius: 15px;
     border: 1px solid #d7cec2;
     box-shadow: 0 6px 18px rgba(78, 51, 51, 0.08);
     align-items: center;
+}
+
+
+.container button {
+    display: block;
+    margin:auto;
+    margin-top: 29px;
 }
 
 .container h1 {
@@ -76,8 +85,18 @@ input:focus {
     border-color: #b87082;
 }
 
+.voltar {
+    display: block;
+    text-align: center;
+    margin-top: 25px;
+    color: #b87082;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
 button {
-    background-color:#c88194;
+    background-color:#c88194;;
     color: #ffffff;
     border: none;
     border-radius: 8px;
@@ -87,8 +106,6 @@ button {
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    justify-content: center; 
-    width: 100%; 
     gap: 8px;
     margin-top: 30px;
     transition: background-color 0.2s;
@@ -98,22 +115,14 @@ button:hover {
     background-color: #b57485;
 }
 
-.voltar {
+.btn-centralizado {
     display: block;
-    text-align: center;
-    margin-top: 15px;
-    color: #b87082;
-    font-size: 14px;
-    text-decoration: none;
-    transition: color 0.2s;
+    margin: 25px auto 0 auto; 
 }
 
-.voltar:hover {
-    color: #a05f70;
-}
 
 .mensagem-alerta {
-    padding: 15px;
+    padding: 12px;
     margin-bottom: 20px;
     border-radius: 8px;
     text-align: center;
@@ -121,27 +130,21 @@ button:hover {
     font-weight: 600;
     display: none; 
     width: 100%;
-    max-width: 400px; 
-    margin-left: auto;
-    margin-right: auto;
-    box-sizing: border-box;
 }
 
 .mensagem-alerta.erro {
-    background-color: #f8d7da; 
+    background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
-    display: block; 
+    display: block;
 }
 
 .mensagem-alerta.sucesso {
-    background-color: #d4edda; 
+    background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
-    display: block; 
+    display: block;
 }
-
-
 
 @media (max-width: 600px) {
     .form-grid {
@@ -156,14 +159,19 @@ button:hover {
         width: 90%;
     }
 
+    .container button {
+        display: block;
+        margin: 20px auto;
+        margin-top: 50px;
+    }
     .header h1 {
-        color: #b87082;
-        font-size: 2rem;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-bottom: 4px;
+    color: #b87082;
+    font-size: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
     }
 }
 

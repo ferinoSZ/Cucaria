@@ -10,7 +10,7 @@
 <body>
 
     <div class="titulo">
-        <img src="img/logo.jpg.jpg" alt="Logo">
+        <img src="img/logoNew.png" alt="Logo">
         <h1>Ama Cucaria</h1>
     </div>
 
@@ -20,7 +20,7 @@
 
     <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-    <form action="../frontXback/processa_redefinicao.php" method="POST" class="container-login">
+    <form action="../API/processa_redefinicao.php" method="POST" class="container-login">
         
         <input type="hidden" name="token" id="tokenValue">
 
@@ -34,21 +34,21 @@
             <input type="password" name="confirma_senha" placeholder="Repita a nova senha" required>
         </div>
 
-        <button type="submit" class="btn">Salvar nova senha</button>
+        <button type="submit" class="btn btn-centralizado">Salvar nova senha</button>
+
     </form>
 
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const erro = urlParams.get('erro');
+        const sucesso = urlParams.get('sucesso'); 
         const token = urlParams.get('token');
         const caixaMensagem = document.getElementById('caixa-mensagem');
 
-        // 1. Pega o token da URL e coloca no campo oculto do formulário
         if (token) {
             document.getElementById('tokenValue').value = token;
         }
-
-        // 2. Verifica se o PHP devolveu algum erro
+        
         if (erro == 'senhas_diferentes') {
             caixaMensagem.classList.add('erro');
             caixaMensagem.innerText = 'As senhas digitadas não são iguais!';
@@ -66,8 +66,8 @@
             urlLimpa.searchParams.delete('sucesso');
             window.history.replaceState(null, '', urlLimpa);
         }
-
     </script>
+
 
 </body>
 </html>
