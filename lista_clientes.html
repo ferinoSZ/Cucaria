@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="lista_clientes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="titulo">
+        <img src="img/logo.jpg.jpg" alt="Logo">
+        <h1>Ama Cucaria</h1>
+    </div>
+
+        <nav>
+            <ul id="menu">
+                <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+                <li><a href="#produtos" class="active"><i class="bi bi-box-seam-fill"></i>Produtos</a></li>
+                <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
+                <li><a href="#cardapio"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
+                <li><a href="#clientes"><i class="fa-solid fa-users"></i>Clientes</a></li>
+            </ul>
+        </nav>
+        <div class="cliente">
+            <h1>Lista de Clientes</h1>
+        </div>
+
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>VIP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Exemplo de linha de cliente -->
+                <tr>
+                    <td>Maria Silva</td>
+                    <td>maria.silva@email.com</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                </tr>
+                    <td>Wesley Ferino</td>
+                    <td>maria.silva@email.com</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        <input type="checkbox" checked>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+
+</html>
