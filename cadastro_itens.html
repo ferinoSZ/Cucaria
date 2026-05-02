@@ -21,6 +21,18 @@
         <h1><i class="fa-solid fa-plus"></i> Cadastrar Produto</h1>
         <h3>Preencha os dados do novo produto</h3>
 
+        <a href="cardapio.html" class="botao-voltar">
+            <i class="fa-solid fa-arrow-left"></i>
+            Voltar para o Cardápio
+        </a>
+
+        <div id="mensagem-sucesso" class="mensagem-sucesso" aria-live="polite">
+            <h4>Produto cadastrado com sucesso!</h4>
+            <p><strong>Nome:</strong> <span id="sucesso-nome"></span></p>
+            <p><strong>Valor de venda:</strong> <span id="sucesso-preco"></span></p>
+            <p><strong>Descrição:</strong> <span id="sucesso-descricao"></span></p>
+        </div>
+
 
         <form action="#" method="POST" enctype="multipart/form-data">
             <div class="form-grid">
@@ -74,6 +86,16 @@
         </form>
     </div>
     <script>
+        const form = document.querySelector('form');
+        const nomeInput = document.getElementById('nome');
+        const precoInput = document.getElementById('preco');
+        const descricaoInput = document.getElementById('descricao');
+
+        const mensagemSucesso = document.getElementById('mensagem-sucesso');
+        const sucessoNome = document.getElementById('sucesso-nome');
+        const sucessoPreco = document.getElementById('sucesso-preco');
+        const sucessoDescricao = document.getElementById('sucesso-descricao');
+
         const imagemInput = document.getElementById('imagem');
         const preview = document.getElementById('preview');
 
@@ -94,6 +116,24 @@
             preview.src = objectUrl;
             preview.dataset.objectUrl = objectUrl;
             preview.classList.add('visible');
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const nome = nomeInput.value.trim();
+            const descricao = descricaoInput.value.trim();
+            const precoValor = Number(precoInput.value);
+            const precoFormatado = Number.isFinite(precoValor)
+                ? precoValor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+                : precoInput.value;
+
+
+            sucessoNome.textContent = nome || '-';
+            sucessoPreco.textContent = precoFormatado || '-';
+            sucessoDescricao.textContent = descricao || '-';
+
+            mensagemSucesso.classList.add('visible');
         });
     </script>
 </body>

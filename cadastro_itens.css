@@ -68,6 +68,53 @@ body {
     margin-bottom: 24px;
 }
 
+.botao-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: #e8ddd3;
+    border: 1px solid #d0c3b6;
+    border-radius: 10px;
+    color: #5d4a40;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.botao-voltar:hover {
+    background: #d9cbbf;
+    transform: translateY(-1px);
+}
+
+.mensagem-sucesso {
+    display: none;
+    margin: -8px 0 20px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    border: 1px solid #b9dcbf;
+    background: #edf9ef;
+    color: #2f5f38;
+}
+
+.mensagem-sucesso.visible {
+    display: block;
+}
+
+.mensagem-sucesso h4 {
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+}
+
+.mensagem-sucesso p {
+    margin-bottom: 5px;
+}
+
+.mensagem-sucesso p:last-child {
+    margin-bottom: 0;
+}
+
 .container input,
 .container textarea {
     width: 100%;
@@ -214,6 +261,11 @@ textarea:focus {
     .container {
         width: 100%;
         margin-top: 54px;
+    }
+
+    .botao-voltar {
+        width: 100%;
+        justify-content: center;
     }
 
     .container button {
