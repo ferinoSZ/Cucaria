@@ -21,6 +21,10 @@
                     <p class="marca-subtitulo">CONFEITARIA ARTESANAL</p>
                 </div>
             </div>
+            <button class="botao-carrinho" id="botaoCarrinho" title="Seu carrinho" style="display: none;">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <span class="contador-carrinho" id="contadorCarrinho">0</span>
+            </button>
         </div>
     </header>
 
@@ -28,7 +32,6 @@
     <nav class="nav-adm" id="navAdm" style="display: none;">
         <ul id="menu-adm">
             <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
-            <li><a href="#produtos"><i class="bi bi-box-seam-fill"></i>Produtos</a></li>
             <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
             <li><a href="cardapio.html" class="active"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
             <li><a href="lista_clientes.html"><i class="fa-solid fa-users"></i>Clientes</a></li>
@@ -74,6 +77,41 @@
             ← Voltar
         </button>
     </main>
+
+    <!-- TOAST NOTIFICAÇÃO -->
+    <div class="toast" id="toastNotificacao"></div>
+
+    <!-- MODAL CARRINHO -->
+    <div class="modal-confirmacao" id="modalCarrinho" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloCarrinho">
+            <h3 id="modalTituloCarrinho">Seu Carrinho</h3>
+            <div id="listaCarrinho" class="lista-carrinho">
+                <!-- Itens do carrinho serão adicionados aqui -->
+            </div>
+            <div class="modal-carrinho-resumo" id="resumoCarrinho" style="display: none;">
+                <p><strong>Total:</strong> <span id="totalCarrinho">R$ 0,00</span></p>
+            </div>
+            <p id="mensagemCarrinhoVazio" class="mensagem-vazio">Seu carrinho está vazio</p>
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-cancelar" id="botaoFecharCarrinho">Fechar</button>
+                <button type="button" class="modal-botao modal-botao-confirmar" id="botaoFinalizarPedido" style="display: none;">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-confirmacao" id="modalConfirmacaoExclusao" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloExclusao">
+            <h3 id="modalTituloExclusao">Confirmar exclusão</h3>
+            <p class="modal-texto">Tem certeza que deseja excluir o item:</p>
+            <p><strong>Nome:</strong> <span id="modalNomeProduto"></span></p>
+            <p><strong>Preço:</strong> <span id="modalPrecoProduto"></span></p>
+            <p><strong>Descrição:</strong> <span id="modalDescricaoProduto"></span></p>
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-cancelar" id="modalCancelarExclusao">Cancelar</button>
+                <button type="button" class="modal-botao modal-botao-confirmar" id="modalConfirmarExclusao">Excluir</button>
+            </div>
+        </div>
+    </div>
 
     <script src="cardapio.js"></script>
 </body>

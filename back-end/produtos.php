@@ -20,13 +20,34 @@ switch ($method) {
         break;
 
     case 'POST':
+        $nome = $_POST['nome'] ?? '';
+        $preco_venda = $_POST['preco_venda'] ?? 0;
+        $preco_producao = $_POST['preco_producao'] ?? 0;
+        $descricao = $_POST['descricao'] ?? '';
+
+        $imagem_url = "";
+
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
+
+            $pasta = "../front-end/img/produtos/";
+
+            $ext = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
+            $nomeArquivo = uniqid("produto_") . "." . $ext;
+
+            $caminhoCompleto = $pasta . $nomeArquivo;
+
+            move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoCompleto);
+
+            $imagem_url = "img/produtos/" . $nomeArquivo;
+        }
+
         $ok = Produto::cadastrar(
             $conn,
-            $input['nome'],
-            $input['preco_venda'],
-            $input['preco_producao'],
-            $input['descricao'],
-            $input['imagem_url']
+            $nome,
+            $preco_venda,
+            $preco_producao,
+            $descricao,
+            $imagem_url
         );
 
         echo json_encode(["success" => $ok]);

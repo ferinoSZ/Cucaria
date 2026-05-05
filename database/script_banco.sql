@@ -26,3 +26,20 @@ CREATE TABLE produtos (
     data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE pedidos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numero VARCHAR(20),
+    data_pedido DATETIME DEFAULT CURRENT_TIMESTAMP,
+    total DECIMAL(10,2),
+    status VARCHAR(20) DEFAULT 'novo'
+);
+
+CREATE TABLE itens_pedido (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pedido_id INT,
+    produto_id INT,
+    nome_produto VARCHAR(255),
+    quantidade INT,
+    preco DECIMAL(10,2),
+    FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
+);
