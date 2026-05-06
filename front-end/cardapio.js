@@ -30,6 +30,31 @@ let carrinho = [];
 // Variável para controlar o estado do modo ADM
 let modoAdmAtivo = false; // Defina como true para ativar o modo ADM, false para desativar
 
+async function verificarSessao() {
+    try {
+        const response = await fetch("http://localhost/Cucaria/back-end/session.php", {
+            credentials: "include"
+        });
+
+        const dados = await response.json();
+
+        if (dados.logado) {
+            modoAdmAtivo = dados.perfil === "admin";
+        } else {
+            modoAdmAtivo = false;
+        }
+
+        console.log("Usuário:", dados.nome);
+        console.log("Modo ADM:", modoAdmAtivo);
+
+        aplicarConfiguracaoModo();
+
+    } catch (erro) {
+        console.error("Erro ao verificar sessão:", erro);
+    }
+}
+
+
 // ===== APLICAR CONFIGURAÇÕES DO MODO ADM =====
 function aplicarConfiguracaoModo() {
     // Mostrar/esconder nav ADM
@@ -202,23 +227,35 @@ async function alternarEstoqueProduto(produtoId) {
 }
 
 async function excluirProduto(produtoId) {
-    const indiceProduto = produtos.findIndex(p => p.id === produtoId);
-
-    if (indiceProduto === -1) return;
-
-    const produto = produtos[indiceProduto];
+    const produto = produtos.find(p => p.id === produtoId);
+    if (!produto) return;
 
     abrirModalConfirmacaoExclusao(produto, async () => {
 
-        await fetch(API_URL, {
-            method: "DELETE",
+        try {
+            const response = await fetch(API_URL, {
+                method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ id: produtoId })
-        });
+            body: JSON.stringify({
+                acao: "excluir",
+                id: produtoId
+            })
+            });
 
-        carregarProdutos(); 
+            const resultado = await response.json();
+
+            if (resultado.success) {
+                carregarProdutos();
+            } else {
+                alert("Erro ao excluir");
+            }
+
+        } catch (erro) {
+            console.error("Erro ao excluir:", erro);
+        }
+
     });
 }
 
@@ -438,8 +475,12 @@ botaoFinalizarPedido.addEventListener('click', async () => {
     }
 });
 
-window.addEventListener('load', () => {
+window.addEventListener('load', async () => {
     console.log('Página carregada!');
+
+    await verificarSessao(); 
+
     console.log('Modo ADM:', modoAdmAtivo ? 'ATIVADO' : 'DESATIVADO');
+
     carregarProdutos(); 
 });

@@ -13,7 +13,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         sessao::logar($usuarioAutenticado);
 
         if ($_SESSION['usuario_perfil'] === 'admin') {
-            header("Location: ../front-end/controle_clientes.html");
+            header("Location: ../front-end/cardapio.html");
             exit();
         } else {
             header("Location: ../front-end/cardapio.html");
