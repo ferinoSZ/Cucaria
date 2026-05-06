@@ -28,17 +28,17 @@ let carrinho = [];
 
 // ===== CONFIGURAÇÃO DE MODO ADM =====
 // Variável para controlar o estado do modo ADM
-let modoAdmAtivo = false; // Defina como true para ativar o modo ADM, false para desativar
+let modoAdmAtivo = false;
 
 // ===== APLICAR CONFIGURAÇÕES DO MODO ADM =====
 function aplicarConfiguracaoModo() {
     // Mostrar/esconder nav ADM
     navAdm.style.display = modoAdmAtivo ? 'block' : 'none';
     
-    // Mostrar/esconder botão de cadastrar
+    // Mostrar/esconder botão de cadastrar item que só deve aparecer para ADM
     botaoCadastrar.style.display = modoAdmAtivo ? 'block' : 'none';
     
-    // Mostrar/esconder ações administrativas dos cards
+    // Mostrar/esconder funções de ADM dos produtos
     atualizarVisibilidadeAcoesAdm();
 }
 

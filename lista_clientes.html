@@ -39,6 +39,11 @@
         <h1>Lista de Clientes</h1>
     </div>
 
+    <form class="formulario-pesquisa" action="/search" method="get">
+        <input type="text" placeholder="Pesquisar por nome ou email..." id="pesquisa-cliente">
+        <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </form>
+
     <div class="container">
         <table>
             <thead>
@@ -46,6 +51,7 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th>VIP</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody id="tabela-clientes">
@@ -56,35 +62,71 @@
     <script>
         const clientes = [
             { id: 1, nome: "Maria Silva", email: "maria@email.com", vip: false },
-            { id: 2, nome: "Wesley Ferino", email: "wesley@email.com", vip: true }
+            { id: 2, nome: "Wesley Ferino", email: "wesley@email.com", vip: true },
+            { id: 3, nome: "Felipe", email: "felipe@email.com", vip: true },
+            { id: 4, nome: "Fernando ", email: "fernando@email.com", vip: true },
+            { id: 5, nome: "Carlos", email: "carlos@email.com", vip: true },
+            { id: 6, nome: "Lucas", email: "lucas@email.com", vip: true },
+            { id: 7, nome: "Guilherme", email: "guilherme@email.com", vip: true },
+            { id: 8, nome: "Gustavo", email: "gustavo@email.com", vip: true },
+            { id: 9, nome: "Rino", email: "rino@email.com", vip: true },
+            { id: 10, nome: "Fabricio", email: "fabricio@email.com", vip: true }
         ];
 
         const tabela = document.getElementById("tabela-clientes");
+        let clientesRenderizados = [...clientes];
 
-        clientes.forEach((cliente) => {
-            const linha = document.createElement("tr");
+        function renderizarClientes() {
+            tabela.innerHTML = "";
 
-            linha.innerHTML = `
-                <td>${cliente.nome}</td>
-                <td>${cliente.email}</td>
-                <td>
-                    <label class="switch">
-                        <input type="checkbox" ${cliente.vip ? "checked" : ""} data-id="${cliente.id}">
-                        <span class="slider"></span>
-                    </label>
-                </td>
-            `;
+            clientesRenderizados.forEach((cliente) => {
+                const linha = document.createElement("tr");
 
-            tabela.appendChild(linha);
-        });
+                linha.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.email}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" ${cliente.vip ? "checked" : ""} data-id="${cliente.id}">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <button type="button" class="botao-excluir" data-delete-id="${cliente.id}" aria-label="Excluir cliente ${cliente.nome}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </td>
+                `;
+
+                tabela.appendChild(linha);
+            });
+        }
+
+        renderizarClientes();
 
         document.addEventListener("change", function (e) {
             if (e.target.type === "checkbox" && e.target.dataset.id) {
                 const id = e.target.dataset.id;
                 const vip = e.target.checked;
 
+                clientesRenderizados = clientesRenderizados.map((cliente) => (
+                    cliente.id === Number(id) ? { ...cliente, vip } : cliente
+                ));
+
                 console.log(`Cliente ${id} agora é VIP: ${vip}`);
             }
+        });
+
+        document.addEventListener("click", function (e) {
+            const botaoExcluir = e.target.closest(".botao-excluir");
+
+            if (!botaoExcluir) {
+                return;
+            }
+
+            const id = Number(botaoExcluir.dataset.deleteId);
+            clientesRenderizados = clientesRenderizados.filter((cliente) => cliente.id !== id);
+            renderizarClientes();
         });
     </script>
 
