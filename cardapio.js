@@ -28,7 +28,7 @@ let carrinho = [];
 
 // ===== CONFIGURAÇÃO DE MODO ADM =====
 // Variável para controlar o estado do modo ADM
-let modoAdmAtivo = false; // Defina como true para ativar o modo ADM, false para desativar
+let modoAdmAtivo = true; // Defina como true para ativar o modo ADM, false para desativar
 
 // ===== APLICAR CONFIGURAÇÕES DO MODO ADM =====
 function aplicarConfiguracaoModo() {

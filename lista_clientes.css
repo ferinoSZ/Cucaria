@@ -93,6 +93,47 @@ nav ul::-webkit-scrollbar {
     height: 0;
 }
 
+.procurar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    margin-top: 28px;
+    margin-bottom: 12px;
+}
+
+.procurar input{
+    padding: 5px 12px;
+    border: 1px solid #c77d8b;
+    background-color: #f3efe6;
+    border-radius: 20px;
+    width: 200px;
+    transition: 0.3s;
+}
+
+.procurar button {
+    padding: 5px 12px;
+    border: none;
+    background-color: #c77d8b;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.procurar button:hover {
+    background-color: #b87082;
+    
+    
+}
+
+.procurar input:focus {
+    outline: none;
+    border-color: #c77d8b;
+    box-shadow: 0 0 5px rgba(199, 125, 139, 0.5);
+}
+
+
 @media (max-width: 768px) {
     nav {
         width: 100%;
