@@ -201,31 +201,47 @@ function renderizarProdutos() {
 }
 
 async function alternarEstoqueProduto(produtoId) {
+
     const produto = produtos.find(p => p.id === produtoId);
 
     if (!produto) return;
 
     const novoStatus = produto.emEstoque ? 0 : 1;
 
-    await fetch(API_URL, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            id: produto.id,
-            nome: produto.nome,
-            preco_venda: produto.preco,
-            preco_producao: 0,
-            descricao: produto.descricao,
-            imagem_url: produto.imagem_url,
-            ativo: novoStatus
-        })
-    });
+    try {
 
-    carregarProdutos();
+        const resposta = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                acao: "mudarStatus",
+                id: produtoId,
+                status: novoStatus
+            })
+        });
+
+        const dados = await resposta.json();
+
+        console.log("RESPOSTA:", dados);
+
+        if (dados.sucesso) {
+
+            produto.emEstoque = !produto.emEstoque;
+
+            renderizarProdutos();
+
+        } else {
+
+            alert("Erro ao alterar estoque");
+        }
+
+    } catch (erro) {
+
+        console.error("Erro:", erro);
+    }
 }
-
 async function excluirProduto(produtoId) {
     const produto = produtos.find(p => p.id === produtoId);
     if (!produto) return;

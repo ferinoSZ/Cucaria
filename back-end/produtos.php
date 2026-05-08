@@ -27,9 +27,33 @@ switch ($method) {
                 $ok = Produto::excluir($conn, $input['id']);
         
                 echo json_encode(["success" => $ok]);
-                exit; 
+                exit;
             }
         
+            if ($input && isset($input['acao']) && $input['acao'] === 'mudarStatus') {
+        
+                $id = $input['id'] ?? null;
+                $status = $input['status'] ?? null;
+        
+                if ($id === null || $status === null) {
+        
+                    echo json_encode([
+                        "sucesso" => false,
+                        "mensagem" => "Dados inválidos"
+                    ]);
+        
+                    exit;
+                }
+        
+                $resultado = Produto::mudarStatus($conn, $id, $status);
+        
+                echo json_encode([
+                    "sucesso" => $resultado
+                ]);
+        
+                exit;
+            }
+    
             $nome = $_POST['nome'] ?? '';
             $preco_venda = $_POST['preco_venda'] ?? 0;
             $preco_producao = $_POST['preco_producao'] ?? 0;
@@ -61,9 +85,7 @@ switch ($method) {
             );
         
             echo json_encode(["success" => $ok]);
-            break;
-
-        echo json_encode(["success" => $ok]);
+        
         break;
 
     case 'PUT':
@@ -87,4 +109,33 @@ switch ($method) {
 
         echo json_encode(["success" => $ok]);
         break;
+
+    case 'mudarStatus':
+
+    $id = $input['id'] ?? null;
+    $status = $input['status'] ?? null;
+
+    if ($id === null || $status === null) {
+        echo json_encode([
+            "sucesso" => false,
+            "mensagem" => "Dados inválidos"
+        ]);
+        exit;
+    }
+
+    $resultado = Produto::mudarStatus($conn, $id, $status);
+
+    if ($resultado) {
+        echo json_encode([
+            "sucesso" => true,
+            "mensagem" => "Status alterado com sucesso"
+        ]);
+    } else {
+        echo json_encode([
+            "sucesso" => false,
+            "mensagem" => "Erro ao alterar status"
+        ]);
+    }
+
+break;
 }
