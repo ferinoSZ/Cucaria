@@ -59,6 +59,20 @@
         </table>
     </div>
 
+    <div class="modal-confirmacao" id="modalConfirmacaoExclusaoCliente" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloExclusaoCliente">
+            <h3 id="modalTituloExclusaoCliente">Confirmar exclusão</h3>
+            <p class="modal-texto">Tem certeza que deseja excluir este cliente?</p>
+            <p><strong>Nome:</strong> <span id="modalClienteNome"></span></p>
+            <p><strong>Email:</strong> <span id="modalClienteEmail"></span></p>
+            <p><strong>VIP:</strong> <span id="modalClienteVip"></span></p>
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-cancelar" id="modalCancelarExclusaoCliente">Cancelar</button>
+                <button type="button" class="modal-botao modal-botao-confirmar" id="modalConfirmarExclusaoCliente">Excluir</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const clientes = [
             { id: 1, nome: "Maria Silva", email: "maria@email.com", vip: false },
@@ -72,9 +86,15 @@
             { id: 9, nome: "Rino", email: "rino@email.com", vip: true },
             { id: 10, nome: "Fabricio", email: "fabricio@email.com", vip: true }
         ];
-
-        const tabela = document.getElementById("tabela-clientes");
+getElementById("tabela-clientes");
+    const modalConfirmacaoExclusaoCliente = document.getElementById("modalConfirmacaoExclusaoCliente");
+    const modalClienteNome = document.getElementById("modalClienteNome");
+    const modalClienteEmail = document.getElementById("modalClienteEmail");
+    const modalClienteVip = document.getElementById("modalClienteVip");
+    const modalCancelarExclusaoCliente = document.getElementById("modalCancelarExclusaoCliente");
+    const modalConfirmarExclusaoCliente = document.getElementById("modalConfirmarExclusaoCliente");
         let clientesRenderizados = [...clientes];
+    let clienteSelecionadoParaExclusao = null;
 
         function renderizarClientes() {
             tabela.innerHTML = "";
@@ -104,6 +124,21 @@
 
         renderizarClientes();
 
+        function abrirModalExclusaoCliente(cliente) {
+            clienteSelecionadoParaExclusao = cliente;
+            modalClienteNome.textContent = cliente.nome;
+            modalClienteEmail.textContent = cliente.email;
+            modalClienteVip.textContent = cliente.vip ? "Sim" : "Não";
+            modalConfirmacaoExclusaoCliente.classList.add("ativo");
+            modalConfirmacaoExclusaoCliente.setAttribute("aria-hidden", "false");
+        }
+
+        function fecharModalExclusaoCliente() {
+            modalConfirmacaoExclusaoCliente.classList.remove("ativo");
+            modalConfirmacaoExclusaoCliente.setAttribute("aria-hidden", "true");
+            clienteSelecionadoParaExclusao = null;
+        }
+
         document.addEventListener("change", function (e) {
             if (e.target.type === "checkbox" && e.target.dataset.id) {
                 const id = e.target.dataset.id;
@@ -125,8 +160,29 @@
             }
 
             const id = Number(botaoExcluir.dataset.deleteId);
-            clientesRenderizados = clientesRenderizados.filter((cliente) => cliente.id !== id);
+            const cliente = clientesRenderizados.find((item) => item.id === id);
+
+            if (cliente) {
+                abrirModalExclusaoCliente(cliente);
+            }
+        });
+
+        modalCancelarExclusaoCliente.addEventListener("click", fecharModalExclusaoCliente);
+
+        modalConfirmarExclusaoCliente.addEventListener("click", function () {
+            if (!clienteSelecionadoParaExclusao) {
+                return;
+            }
+
+            clientesRenderizados = clientesRenderizados.filter((cliente) => cliente.id !== clienteSelecionadoParaExclusao.id);
             renderizarClientes();
+            fecharModalExclusaoCliente();
+        });
+
+        modalConfirmacaoExclusaoCliente.addEventListener("click", function (e) {
+            if (e.target === modalConfirmacaoExclusaoCliente) {
+                fecharModalExclusaoCliente();
+            }
         });
     </script>
 

@@ -22,13 +22,22 @@ const mensagemCarrinhoVazio = document.getElementById('mensagemCarrinhoVazio');
 const botaoFecharCarrinho = document.getElementById('botaoFecharCarrinho');
 const botaoFinalizarPedido = document.getElementById('botaoFinalizarPedido');
 const toastNotificacao = document.getElementById('toastNotificacao');
+const modalEditarProduto = document.getElementById('modalEditarProduto');
+const formEditarProduto = document.getElementById('formEditarProduto');
+const editarNomeProduto = document.getElementById('editarNomeProduto');
+const editarDescricaoProduto = document.getElementById('editarDescricaoProduto');
+const editarPrecoProduto = document.getElementById('editarPrecoProduto');
+const editarImagem = document.getElementById('editarImagem');
+const editarPreview = document.getElementById('editarPreview');
+const botaoCancelarEdicao = document.getElementById('botaoCancelarEdicao');
 
 let acaoConfirmarExclusao = null;
+let produtoEmEdicao = null;
 let carrinho = [];
 
 // ===== CONFIGURAÇÃO DE MODO ADM =====
 // Variável para controlar o estado do modo ADM
-let modoAdmAtivo = false;
+let modoAdmAtivo = true;
 
 // ===== APLICAR CONFIGURAÇÕES DO MODO ADM =====
 function aplicarConfiguracaoModo() {
@@ -47,10 +56,16 @@ function atualizarVisibilidadeAcoesAdm() {
     botoesEstoque.forEach(botao => {
         botao.style.display = modoAdmAtivo ? 'block' : 'none';
     });
+    
 
-    const botoesExcluir = document.querySelectorAll('.botao-excluir');
-    botoesExcluir.forEach(botao => {
-        botao.style.display = modoAdmAtivo ? 'block' : 'none';
+    const botoesExcluirIcone = document.querySelectorAll('.botao-excluir-icone');
+    botoesExcluirIcone.forEach(botao => {
+        botao.style.display = modoAdmAtivo ? 'flex' : 'none';
+    });
+
+    const botoesEditar = document.querySelectorAll('.botao-editar');
+    botoesEditar.forEach(botao => {
+        botao.style.display = modoAdmAtivo ? 'flex' : 'none';
     });
 
     const botoesCarrinho = document.querySelectorAll('.botao-adicionar-carrinho');
@@ -128,6 +143,9 @@ function renderizarProdutos() {
         cartaoProduto.innerHTML = `
             <div class="imagem-produto">
                 ${crachá}
+                <button class="botao-excluir-icone" data-produto-id="${produto.id}" style="display: ${modoAdmAtivo ? 'flex' : 'none'};" title="Excluir produto">
+                    <i class="bi bi-trash3-fill"></i>
+                </button>
             </div>
             <div class="informacoes-produto">
                 <h3 class="nome-produto">${produto.nome}</h3>
@@ -138,8 +156,8 @@ function renderizarProdutos() {
                     <button class="botao-estoque ${classEstoque}" data-produto-id="${produto.id}" style="display: ${modoAdmAtivo ? 'block' : 'none'};">
                         ${textoEstoque}
                     </button>
-                    <button class="botao-excluir" data-produto-id="${produto.id}" style="display: ${modoAdmAtivo ? 'block' : 'none'};">
-                        Excluir item
+                    <button class="botao-editar" data-produto-id="${produto.id}" style="display: ${modoAdmAtivo ? 'block' : 'none'};" title="Editar produto">
+                        <i class="bi bi-pencil-fill"></i> Editar
                     </button>
                     ${botaoCarrinhoHtml}
                 </div>
@@ -152,10 +170,17 @@ function renderizarProdutos() {
             alternarEstoqueProduto(produto.id);
         });
 
-        const botaoExcluir = cartaoProduto.querySelector('.botao-excluir');
-        botaoExcluir.addEventListener('click', () => {
+        const botaoExcluirIcone = cartaoProduto.querySelector('.botao-excluir-icone');
+        botaoExcluirIcone.addEventListener('click', () => {
             excluirProduto(produto.id);
         });
+
+        const botaoEditar = cartaoProduto.querySelector('.botao-editar');
+        if (botaoEditar) {
+            botaoEditar.addEventListener('click', () => {
+                abrirModalEditarProduto(produto);
+            });
+        }
 
         const botaoAdicionarCarrinho = cartaoProduto.querySelector('.botao-adicionar-carrinho');
         if (botaoAdicionarCarrinho) {
@@ -163,7 +188,7 @@ function renderizarProdutos() {
                 adicionarAoCarrinho(produto);
             });
         }
-        
+
         continerProdutos.appendChild(cartaoProduto);
     });
     
@@ -195,6 +220,11 @@ function excluirProduto(produtoId) {
     });
 }
 
+
+
+
+
+
 function abrirModalConfirmacaoExclusao(produto, onConfirmar) {
     modalNomeProduto.textContent = produto.nome;
     modalPrecoProduto.textContent = `R$ ${produto.preco.toFixed(2)}`;
@@ -210,6 +240,60 @@ function fecharModalConfirmacaoExclusao() {
     modalConfirmacaoExclusao.setAttribute('aria-hidden', 'true');
     acaoConfirmarExclusao = null;
 }
+
+// ===== FUNÇÕES DE EDIÇÃO =====
+function abrirModalEditarProduto(produto) {
+    produtoEmEdicao = produto;
+    editarNomeProduto.value = produto.nome;
+    editarDescricaoProduto.value = produto.descricao;
+    editarPrecoProduto.value = produto.preco;
+    editarPreview.src = produto.foto || '';
+    editarPreview.classList.toggle('visible', Boolean(produto.foto));
+    
+    modalEditarProduto.classList.add('ativo');
+    modalEditarProduto.setAttribute('aria-hidden', 'false');
+}
+
+function fecharModalEditarProduto() {
+    modalEditarProduto.classList.remove('ativo');
+    modalEditarProduto.setAttribute('aria-hidden', 'true');
+    produtoEmEdicao = null;
+}
+
+function salvarEdicaoProduto() {
+    if (!produtoEmEdicao) return;
+    
+    const indice = produtos.findIndex(p => p.id === produtoEmEdicao.id);
+    if (indice > -1) {
+        produtos[indice].nome = editarNomeProduto.value;
+        produtos[indice].descricao = editarDescricaoProduto.value;
+        produtos[indice].preco = parseFloat(editarPrecoProduto.value);
+        produtos[indice].foto = editarPreview.classList.contains('visible') ? editarPreview.src : (produtos[indice].foto || '');
+        
+        mostrarToast('Produto atualizado com sucesso!');
+        renderizarProdutos();
+        fecharModalEditarProduto();
+    }
+}
+
+editarImagem.addEventListener('change', function () {
+    const arquivo = this.files && this.files[0];
+
+    if (!arquivo) {
+        editarPreview.src = '';
+        editarPreview.classList.remove('visible');
+        return;
+    }
+
+    if (editarPreview.dataset.objectUrl) {
+        URL.revokeObjectURL(editarPreview.dataset.objectUrl);
+    }
+
+    const objectUrl = URL.createObjectURL(arquivo);
+    editarPreview.src = objectUrl;
+    editarPreview.dataset.objectUrl = objectUrl;
+    editarPreview.classList.add('visible');
+});
 
 // ===== FUNÇÕES DE CARRINHO =====
 function adicionarAoCarrinho(produto) {
@@ -329,6 +413,19 @@ function fecharModalCarrinho() {
 
 // ===== EVENT LISTENERS =====
 botaoVerCardapio.addEventListener('click', irParaCardapio);
+botaoCancelarEdicao.addEventListener('click', fecharModalEditarProduto);
+
+formEditarProduto.addEventListener('submit', (event) => {
+    event.preventDefault();
+    salvarEdicaoProduto();
+});
+
+modalEditarProduto.addEventListener('click', (event) => {
+    if (event.target === modalEditarProduto) {
+        fecharModalEditarProduto();
+    }
+});
+
 botaoVoltar.addEventListener('click', voltarParaInicial);
 
 modalCancelarExclusao.addEventListener('click', fecharModalConfirmacaoExclusao);

@@ -70,7 +70,7 @@
         </section>
 
         <div class="continer-produtos" id="continerProdutos">
-            <!-- Produtos serão adicionados aqui via JavaScript -->
+            <!-- Produtos adicionados via JavaScript -->
         </div>
 
         <button class="botao-voltar" id="botaoVoltar">
@@ -110,6 +110,41 @@
                 <button type="button" class="modal-botao modal-botao-cancelar" id="modalCancelarExclusao">Cancelar</button>
                 <button type="button" class="modal-botao modal-botao-confirmar" id="modalConfirmarExclusao">Excluir</button>
             </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR PRODUTO -->
+    <div class="modal-confirmacao" id="modalEditarProduto" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloEditar">
+            <h3 id="modalTituloEditar">Editar Produto</h3>
+            <form id="formEditarProduto">
+                <div class="form-grupo">
+                    <label for="editarNomeProduto">Nome:</label>
+                    <input type="text" id="editarNomeProduto" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="editarDescricaoProduto">Descrição:</label>
+                    <textarea id="editarDescricaoProduto" required></textarea>
+                </div>
+                <div class="form-grupo">
+                    <label for="editarPrecoProduto">Preço (R$):</label>
+                    <input type="number" id="editarPrecoProduto" step="0.01" required>
+                </div>
+
+                <div class="campo full">
+                    <label class="upload-label">
+                        <i class="bi bi-image"></i>
+                        Selecionar imagem
+                        <input type="file" id="editarImagem" accept="image/*" hidden>
+                    </label>
+                    <img id="editarPreview" src="" alt="" class="preview-imagem">
+                </div>
+
+                <div class="modal-acoes">
+                    <button type="button" class="modal-botao modal-botao-cancelar" id="botaoCancelarEdicao">Cancelar</button>
+                    <button type="submit" class="modal-botao modal-botao-confirmar">Salvar</button>
+                </div>
+            </form>
         </div>
     </div>
 
