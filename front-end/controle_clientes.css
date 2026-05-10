@@ -1,0 +1,232 @@
+
+.cliente {
+    text-align: center;
+    margin: 20px 0 8px;
+}
+
+.cliente h1 {
+    color: #b87082;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.formulario-pesquisa {
+    width: min(96vw, 720px);
+    margin: 18px auto 24px;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 8px;
+}
+
+.formulario-pesquisa input {
+    flex: 1;
+    min-width: 0;
+    height: clamp(44px, 5vw, 52px);
+    padding: 0 18px;
+    border: 1px solid #d9c9c1;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #6f5648;
+    font-size: 1rem;
+    outline: none;
+    box-shadow: 0 6px 16px rgba(78, 51, 51, 0.06);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.formulario-pesquisa input::placeholder {
+    color: #9d8578;
+}
+
+.formulario-pesquisa input:focus {
+    border-color: #c77d8b;
+    box-shadow: 0 8px 18px rgba(199, 125, 139, 0.18);
+}
+
+.formulario-pesquisa button {
+    width: clamp(44px, 5vw, 52px);
+    height: clamp(44px, 5vw, 52px);
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #c77d8b, #b8697d);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(184, 105, 125, 0.24);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    margin-top: 0;
+}
+
+.formulario-pesquisa button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(184, 105, 125, 0.3);
+    filter: brightness(1.03);
+}
+
+.formulario-pesquisa button:active {
+    transform: translateY(0);
+}
+
+.container {
+    width: min(96vw, 1240px);
+    margin: 0 auto 40px;
+    border: 1px solid #d7cec2;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(78, 51, 51, 0.08);
+    overflow: hidden;
+    background: #f3efe6;
+}
+
+.container table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.container th,
+.container td {
+    text-align: left;
+    padding: 16px 14px;
+    border-bottom: 1px solid #ddc9cc;
+    color: #6f5648;
+    font-size: 1.05rem;
+}
+
+.container th {
+    font-weight: 700;
+    color: #8a7163;
+}
+
+.container tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.container tbody tr:hover {
+    background-color: rgba(184, 112, 130, 0.04);
+}
+
+.container th:last-child,
+.container td:last-child {
+    text-align: center;
+    width: 120px;
+}
+
+.btn-excluir-cliente {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #f4e3e6;
+    color: #b64f63;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 12px rgba(78, 51, 51, 0.08);
+    transition: transform 0.2s ease, background 0.2s ease,
+                color 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 0;
+    flex: none;
+}
+
+.btn-excluir-cliente:hover {
+    transform: translateY(-1px);
+    background: #efcfd6;
+    color: #9f3045;
+    box-shadow: 0 7px 14px rgba(78, 51, 51, 0.12);
+}
+
+.btn-excluir-cliente:active {
+    transform: translateY(0);
+}
+
+.btn-excluir-cliente i {
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d8d0c2;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: #f3efe6;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+}
+
+input:checked + .slider {
+    background-color: #c68395;
+}
+
+input:checked + .slider:before {
+    transform: translateX(18px);
+}
+
+@media (max-width: 768px) {
+    .formulario-pesquisa {
+        width: min(100%, 720px);
+        gap: 8px;
+        padding: 0 4px;
+        margin-top: 14px;
+        margin-bottom: 20px;
+    }
+
+    .formulario-pesquisa input {
+        font-size: 0.95rem;
+        padding: 0 14px;
+    }
+
+    .formulario-pesquisa button {
+        width: 46px;
+        height: 46px;
+    }
+
+    .container th,
+    .container td {
+        font-size: 0.9rem;
+        padding: 12px 10px;
+    }
+
+    .container th:last-child,
+    .container td:last-child {
+        width: 80px;
+    }
+
+    .btn-excluir-cliente {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+}
