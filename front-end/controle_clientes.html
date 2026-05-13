@@ -1,143 +1,428 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ama Cucaria - Controle de Clientes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Lista de Clientes - Ama Cucaria</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="cardapio.css">
     <link rel="stylesheet" href="controle_clientes.css">
+    <style>
+        .painel-desconto {
+            width: min(96vw, 720px);
+            margin: 0 auto 28px;
+            background: linear-gradient(135deg, rgba(199,125,139,0.12), rgba(184,112,130,0.06));
+            border: 1.5px solid rgba(199,125,139,0.35);
+            border-radius: 16px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .painel-desconto-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .painel-desconto-info i {
+            font-size: 1.5rem;
+            color: #c77d8b;
+        }
+
+        .painel-desconto-info div strong {
+            display: block;
+            color: #6f5648;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .painel-desconto-info div span {
+            color: #9d8578;
+            font-size: 0.82rem;
+        }
+
+        .painel-desconto-controle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-desconto-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-desconto-wrapper input {
+            width: 90px;
+            height: 42px;
+            padding: 0 28px 0 14px;
+            border: 1.5px solid #d9c9c1;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.85);
+            color: #6f5648;
+            font-size: 1rem;
+            font-weight: 700;
+            outline: none;
+            text-align: center;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-desconto-wrapper input:focus {
+            border-color: #c77d8b;
+            box-shadow: 0 0 0 3px rgba(199,125,139,0.18);
+        }
+
+        .input-desconto-wrapper .sufixo {
+            position: absolute;
+            right: 12px;
+            color: #9d8578;
+            font-size: 0.9rem;
+            font-weight: 600;
+            pointer-events: none;
+        }
+
+        .btn-salvar-desconto {
+            height: 42px;
+            padding: 0 20px;
+            background: linear-gradient(135deg, #c77d8b, #b8697d);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 6px 16px rgba(184,105,125,0.25);
+            transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+        }
+
+        .btn-salvar-desconto:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(184,105,125,0.32);
+            filter: brightness(1.04);
+        }
+
+        .btn-salvar-desconto:active {
+            transform: translateY(0);
+        }
+
+        .desconto-feedback {
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-top: 4px;
+            text-align: right;
+            min-height: 16px;
+            transition: opacity 0.3s;
+        }
+
+        .desconto-feedback.ok   { color: #5a9e6f; }
+        .desconto-feedback.erro { color: #c0392b; }
+    </style>
 </head>
 
 <body>
+    <!-- HEADER -->
+    <header class="cabecalho">
+        <div class="cabecalho-conteudo">
+            <div class="logo-titulo">
+                <img src="img/logoNew.png" alt="Logo Ama Cucaria" class="logo">
+                <div>
+                    <h1 class="marca-nome">Ama Cucaria</h1>
+                    <p class="marca-subtitulo">CONFEITARIA ARTESANAL</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    <nav class="nav-adm" id="navAdm">
+    
+        <ul id="menu-adm">
+            <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+            <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
+            <li><a href="cardapio.html"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
+            <li><a href="controle_clientes.html" class="active"><i class="fa-solid fa-users"></i>Clientes</a></li>
+            <li><a href="login.html"><i class="bi bi-box-arrow-left"> Sair</i></a></li>
+        </ul>
+    </nav>
 
-    <div class="titulo">
-        <img src="img/logoNew.png" alt="Logo">
-        <h1>Ama Cucaria</h1>
+    <div class="cliente">
+        <h1>Lista de Clientes</h1>
     </div>
 
-    <div class="container-admin">
-        <h2>Clientes Cadastrados</h2>
-        
-        <div class="tabela-wrapper">
-            <table id="tabela-clientes">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Email</th>
-                        <th>VIP</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
+    <div class="painel-desconto">
+        <div class="painel-desconto-info">
+            <div>
+                <strong>Desconto para clientes VIP</strong>
+            </div>
+        </div>
+        <div>
+            <div class="painel-desconto-controle">
+                <div class="input-desconto-wrapper">
+                    <input type="number" id="inputDesconto" min="0" max="100" step="1" value="0" placeholder="0">
+                    <span class="sufixo">%</span>
+                </div>
+                <button class="btn-salvar-desconto" id="btnSalvarDesconto">
+                    <i class="fa-solid fa-floppy-disk"></i> Salvar
+                </button>
+            </div>
+            <p class="desconto-feedback" id="feedbackDesconto"></p>
         </div>
     </div>
 
-    <div id="modal-confirmacao" class="modal-overlay">
-        <div class="modal-box">
-            <h2 class="modal-titulo">Atenção!</h2>
-            <p id="texto-confirmacao" class="modal-texto">Sua mensagem de confirmação vai aqui.</p>
-            
-            <div class="modal-botoes">
-                <button id="btn-confirmar-exclusao" class="btn-modal btn-confirmar">Sim, Excluir</button>
-                <button class="btn-modal btn-cancelar" onclick="fecharModalConfirmacao()">Cancelar</button>
+    <form class="formulario-pesquisa" onsubmit="return false;">
+        <input type="text" placeholder="Pesquisar por nome ou email..." id="pesquisa-cliente">
+        <button type="button" onclick="filtrarClientes()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+    </form>
+
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>VIP</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody id="tabela-clientes">
+                <tr id="linha-carregando">
+                    <td colspan="4" style="text-align:center; color:#9d8578; padding:32px;">
+                        Carregando clientes...
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal-confirmacao" id="modalConfirmacaoExclusaoCliente" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloExclusaoCliente">
+            <h3 id="modalTituloExclusaoCliente">Confirmar exclusão</h3>
+            <p class="modal-texto">Tem certeza que deseja excluir este cliente?</p>
+            <p><strong>Nome:</strong> <span id="modalClienteNome"></span></p>
+            <p><strong>Email:</strong> <span id="modalClienteEmail"></span></p>
+            <p><strong>VIP:</strong> <span id="modalClienteVip"></span></p>
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-cancelar" id="modalCancelarExclusaoCliente">Cancelar</button>
+                <button type="button" class="modal-botao modal-botao-confirmar" id="modalConfirmarExclusaoCliente">Excluir</button>
             </div>
         </div>
     </div>
 
-
     <script>
+        const API_URL = '../API/controle_clientes.php';
+
+        const tabela                          = document.getElementById('tabela-clientes');
+        const modalConfirmacaoExclusaoCliente = document.getElementById('modalConfirmacaoExclusaoCliente');
+        const modalClienteNome                = document.getElementById('modalClienteNome');
+        const modalClienteEmail               = document.getElementById('modalClienteEmail');
+        const modalClienteVip                 = document.getElementById('modalClienteVip');
+        const modalCancelarExclusaoCliente    = document.getElementById('modalCancelarExclusaoCliente');
+        const modalConfirmarExclusaoCliente   = document.getElementById('modalConfirmarExclusaoCliente');
+        const inputDesconto                   = document.getElementById('inputDesconto');
+        const btnSalvarDesconto               = document.getElementById('btnSalvarDesconto');
+        const feedbackDesconto                = document.getElementById('feedbackDesconto');
+
+        let todosClientes                  = [];
+        let clientesRenderizados           = [];
+        let clienteSelecionadoParaExclusao = null;
+
         async function carregarClientes() {
             try {
-                const resposta = await fetch('../API/controle_clientes.php');
-                const clientes = await resposta.json();
-                
-                const corpoTabela = document.querySelector('#tabela-clientes tbody');
-                corpoTabela.innerHTML = ''; 
-                clientes.forEach(cliente => {
-                    const isVip = cliente.cliente_vip == 1 ? 'checked' : '';
+                const resposta = await fetch(API_URL, { credentials: 'include' });
+                const dados    = await resposta.json();
 
-                    corpoTabela.innerHTML += `
-                        <tr>
-                            <td class="col-nome">${cliente.nome}</td>
-                            <td>${cliente.email}</td>
-                            <td>
-                                <label class="switch">
-                                    <input type="checkbox" ${isVip} onchange="alternarVip(${cliente.id}, this.checked)">
-                                    <span class="slider"></span>
-                                </label>
-                            </td>
-                            <td>
-                                <button class="btn-excluir" onclick="excluirUsuario(${cliente.id}, '${cliente.nome}')">Excluir</button>
-                            </td>
-                        </tr>
-                    `;
-                });
+                if (dados.erro) {
+                    tabela.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#b64f63;padding:32px;">
+                        Acesso negado. Faça login como administrador.</td></tr>`;
+                    return;
+                }
+
+                if (dados.desconto_vip !== undefined) {
+                    inputDesconto.value = dados.desconto_vip;
+                }
+
+                todosClientes = dados.clientes.map(c => ({
+                    id:    Number(c.id),
+                    nome:  c.nome,
+                    email: c.email,
+                    vip:   c.cliente_vip == 1
+                }));
+
+                clientesRenderizados = [...todosClientes];
+                renderizarClientes();
+
             } catch (erro) {
-                console.error("Erro ao carregar a tabela:", erro);
-                alert("Erro ao buscar clientes. Verifique sua conexão ou a API.");
+                console.error('Erro ao carregar clientes:', erro);
+                tabela.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#b64f63;padding:32px;">
+                    Erro ao conectar com a API.</td></tr>`;
             }
         }
 
-        async function alternarVip(idUsuario, statusVip) {
+        btnSalvarDesconto.addEventListener('click', async () => {
+            const valor = parseFloat(inputDesconto.value);
+
+            if (isNaN(valor) || valor < 0 || valor > 100) {
+                mostrarFeedback('Valor inválido. Use entre 0 e 100.', false);
+                return;
+            }
+
             try {
-                await fetch('../API/controle_clientes.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ acao: 'toggleVip', id: idUsuario, vip: statusVip })
+                const resp = await fetch(API_URL, {
+                    method:      'POST',
+                    credentials: 'include',
+                    headers:     { 'Content-Type': 'application/json' },
+                    body:        JSON.stringify({ acao: 'salvarDesconto', desconto: valor })
+                });
+                const dados = await resp.json();
+                mostrarFeedback(dados.sucesso ? 'Desconto salvo com sucesso!' : 'Erro ao salvar.', dados.sucesso);
+            } catch (e) {
+                mostrarFeedback('Erro de conexão.', false);
+            }
+        });
+
+        function mostrarFeedback(msg, ok) {
+            feedbackDesconto.textContent = msg;
+            feedbackDesconto.className   = 'desconto-feedback ' + (ok ? 'ok' : 'erro');
+            setTimeout(() => { feedbackDesconto.textContent = ''; feedbackDesconto.className = 'desconto-feedback'; }, 3000);
+        }
+
+        function renderizarClientes() {
+            tabela.innerHTML = '';
+
+            if (clientesRenderizados.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#9d8578;padding:32px;">
+                    Nenhum cliente encontrado.</td></tr>`;
+                return;
+            }
+
+            clientesRenderizados.forEach(cliente => {
+                const linha = document.createElement('tr');
+                linha.innerHTML = `
+                    <td>${cliente.nome}</td>
+                    <td>${cliente.email}</td>
+                    <td>
+                        <label class="switch">
+                            <input type="checkbox" ${cliente.vip ? 'checked' : ''} data-id="${cliente.id}">
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                        <button type="button" class="btn-excluir-cliente"
+                            data-delete-id="${cliente.id}"
+                            aria-label="Excluir cliente ${cliente.nome}">
+                            <i class="bi bi-trash3-fill"></i>
+                        </button>
+                    </td>
+                `;
+                tabela.appendChild(linha);
+            });
+        }
+
+        function filtrarClientes() {
+            const termo = document.getElementById('pesquisa-cliente').value.trim().toLowerCase();
+            clientesRenderizados = termo
+                ? todosClientes.filter(c =>
+                    c.nome.toLowerCase().includes(termo) ||
+                    c.email.toLowerCase().includes(termo))
+                : [...todosClientes];
+            renderizarClientes();
+        }
+
+        document.getElementById('pesquisa-cliente').addEventListener('input', filtrarClientes);
+
+        document.addEventListener('change', async function (e) {
+            if (e.target.type !== 'checkbox' || !e.target.dataset.id) return;
+
+            const id      = Number(e.target.dataset.id);
+            const novoVip = e.target.checked;
+
+            const atualizar = arr => arr.map(c => c.id === id ? { ...c, vip: novoVip } : c);
+            todosClientes        = atualizar(todosClientes);
+            clientesRenderizados = atualizar(clientesRenderizados);
+
+            try {
+                await fetch(API_URL, {
+                    method:      'POST',
+                    credentials: 'include',
+                    headers:     { 'Content-Type': 'application/json' },
+                    body:        JSON.stringify({ acao: 'toggleVip', id, vip: novoVip })
                 });
             } catch (erro) {
-                alert("Erro ao atualizar o status VIP.");
-                carregarClientes(); 
+                console.error('Erro ao atualizar VIP:', erro);
+                e.target.checked = !novoVip;
+                const reverter = arr => arr.map(c => c.id === id ? { ...c, vip: !novoVip } : c);
+                todosClientes        = reverter(todosClientes);
+                clientesRenderizados = reverter(clientesRenderizados);
             }
+        });
+
+        document.addEventListener('click', function (e) {
+            const botao = e.target.closest('.btn-excluir-cliente');
+            if (!botao) return;
+            const id      = Number(botao.dataset.deleteId);
+            const cliente = clientesRenderizados.find(c => c.id === id);
+            if (cliente) abrirModalExclusaoCliente(cliente);
+        });
+
+        function abrirModalExclusaoCliente(cliente) {
+            clienteSelecionadoParaExclusao   = cliente;
+            modalClienteNome.textContent     = cliente.nome;
+            modalClienteEmail.textContent    = cliente.email;
+            modalClienteVip.textContent      = cliente.vip ? 'Sim' : 'Não';
+            modalConfirmacaoExclusaoCliente.classList.add('ativo');
+            modalConfirmacaoExclusaoCliente.setAttribute('aria-hidden', 'false');
         }
-        const modal = document.getElementById('modal-confirmacao');
-        const textoConfirmacao = document.getElementById('texto-confirmacao');
-        const btnConfirmar = document.getElementById('btn-confirmar-exclusao');
 
-        function excluirUsuario(idUsuario, nomeUsuario) {
-            btnConfirmar.dataset.id = idUsuario; 
-            
-            textoConfirmacao.innerHTML = `Tem certeza que deseja excluir permanentemente o cliente <strong>${nomeUsuario}</strong>?`;
-            modal.style.display = 'flex';
+        function fecharModalExclusaoCliente() {
+            modalConfirmacaoExclusaoCliente.classList.remove('ativo');
+            modalConfirmacaoExclusaoCliente.setAttribute('aria-hidden', 'true');
+            clienteSelecionadoParaExclusao = null;
         }
 
-        function fecharModalConfirmacao() {
-            modal.style.display = 'none';
-        }
+        modalCancelarExclusaoCliente.addEventListener('click', fecharModalExclusaoCliente);
+        modalConfirmacaoExclusaoCliente.addEventListener('click', function (e) {
+            if (e.target === modalConfirmacaoExclusaoCliente) fecharModalExclusaoCliente();
+        });
 
-        btnConfirmar.addEventListener('click', async function() {
-
-            const idUsuario = this.dataset.id; 
-
-            if (!idUsuario) return;
-
-            fecharModalConfirmacao(); 
+        modalConfirmarExclusaoCliente.addEventListener('click', async function () {
+            if (!clienteSelecionadoParaExclusao) return;
+            const idParaExcluir = clienteSelecionadoParaExclusao.id;
+            fecharModalExclusaoCliente();
 
             try {
-                const resposta = await fetch('../API/controle_clientes.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ acao: 'excluir', id: idUsuario })
+                const resposta = await fetch(API_URL, {
+                    method:      'POST',
+                    credentials: 'include',
+                    headers:     { 'Content-Type': 'application/json' },
+                    body:        JSON.stringify({ acao: 'excluir', id: idParaExcluir })
                 });
-                
                 const resultado = await resposta.json();
 
                 if (resultado.sucesso) {
-                    carregarClientes();
+                    todosClientes        = todosClientes.filter(c => c.id !== idParaExcluir);
+                    clientesRenderizados = clientesRenderizados.filter(c => c.id !== idParaExcluir);
+                    renderizarClientes();
                 } else {
-                    alert("Erro ao excluir: " + resultado.erro);
+                    alert('Erro ao excluir cliente: ' + (resultado.erro || 'Tente novamente.'));
                 }
             } catch (erro) {
-                console.error("Erro na comunicação com a API:", erro);
-                alert("Erro de conexão ao tentar excluir.");
+                console.error('Erro ao excluir:', erro);
+                alert('Erro de conexão ao tentar excluir.');
             }
         });
+
         document.addEventListener('DOMContentLoaded', carregarClientes);
     </script>
 
 </body>
 </html>
-

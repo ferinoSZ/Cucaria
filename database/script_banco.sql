@@ -43,3 +43,7 @@ CREATE TABLE itens_pedido (
     preco DECIMAL(10,2),
     FOREIGN KEY (pedido_id) REFERENCES pedidos(id)
 );
+CREATE TABLE descontos (
+    id INT PRIMARY KEY,
+    valor DECIMAL(5,2) DEFAULT 0.00
+);

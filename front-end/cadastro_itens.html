@@ -102,7 +102,6 @@ const sucessoDescricao = document.getElementById('sucesso-descricao');
 const imagemInput = document.getElementById('imagem');
 const preview = document.getElementById('preview');
 
-// ===== PREVIEW =====
 imagemInput.addEventListener('change', function () {
     const arquivo = this.files && this.files[0];
 
@@ -117,7 +116,6 @@ imagemInput.addEventListener('change', function () {
     preview.classList.add('visible');
 });
 
-// ===== ENVIO =====
 form.addEventListener('submit', async function (event) {
     event.preventDefault();
 

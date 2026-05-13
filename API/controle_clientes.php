@@ -14,17 +14,34 @@ if (!isset($_SESSION['usuario_perfil']) || $_SESSION['usuario_perfil'] !== 'admi
 $metodo = $_SERVER['REQUEST_METHOD'];
 
 if ($metodo === 'GET') {
-    echo json_encode(Usuario::listarClientes($conn));
-} 
+    $clientes = Usuario::listarClientes($conn);
+    $res = $conn->query("SELECT valor FROM descontos WHERE id = 1");
+    $desconto = $res && $res->num_rows > 0 ? (float)$res->fetch_assoc()['valor'] : 0;
+
+    echo json_encode([
+        'clientes'     => $clientes,
+        'desconto_vip' => $desconto
+    ]);
+}
 
 if ($metodo === 'POST') {
     $dados = json_decode(file_get_contents('php://input'), true);
+
     if ($dados['acao'] === 'toggleVip') {
         Usuario::atualizarVip($conn, $dados['id'], $dados['vip']);
         echo json_encode(['sucesso' => true]);
+
     } elseif ($dados['acao'] === 'excluir') {
         Usuario::excluir($conn, $dados['id']);
         echo json_encode(['sucesso' => true]);
+
+    } elseif ($dados['acao'] === 'salvarDesconto') {
+        $desconto = max(0, min(100, (float)($dados['desconto'] ?? 0)));
+        $stmt = $conn->prepare("INSERT INTO descontos (id, valor) VALUES (1, ?) ON DUPLICATE KEY UPDATE valor = ?");
+        $val = (string)$desconto;
+        $stmt->bind_param('ss', $val, $val);
+        $ok = $stmt->execute();
+        echo json_encode(['sucesso' => $ok]);
     }
 }
 ?>
