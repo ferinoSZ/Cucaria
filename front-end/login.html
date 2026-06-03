@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ama Cucaria - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <div class="titulo">
+        <img src="img/logoNew.png" alt="Logo">
+        <h1>Ama Cucaria</h1>
+    </div>
+
+    <div class="container">
+        <h1>Login</h1>
+        <h3>Preencha os dados para acessar sua conta</h3>
+
+        <div id="caixa-mensagem" class="mensagem-alerta"></div>
+
+        <form action="../API/processa_login.php" method="POST">
+            <div class="form-grid">
+
+                <div class="input-group full-width">
+                    <label>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                        Email *
+                    </label>
+                    <input type="email" name="email" placeholder="Ex: maria@exemplo.com" required>
+                </div>
+                <div class="input-group">
+                    <label>
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+                        </svg>
+                        Senha *
+                    </label>
+                    <input type="password" name="senha" placeholder="Digite sua senha" required>
+                </div>
+            </div>
+
+            <div class="lembrar">
+                <input type="checkbox" id="lembrar" name="lembrar">
+                <label for="lembrar">Lembrar de mim</label>
+
+                <a href="esqueceu_senha.html" class="link">Esqueceu sua senha?</a>
+            </div>
+
+            <button type="submit">
+                Fazer Login
+            </button>
+
+            <a href="cadastro.html" class="cadastro">Não tem uma conta? Cadastre-se</a>
+        </form>
+    </div>
+
+    <div id="popup-sucesso" class="modal-overlay">
+        <div class="modal-box">
+            <h2 style="color: #b87082; margin-bottom: 10px;">Sucesso!</h2>
+            <p id="texto-popup">Sua mensagem vai aparecer aqui.</p>
+            <button class="btn-modal" onclick="fecharPopup()">Entendi</button>
+        </div>
+    </div>
+
+    
+
+<script> 
+        const urlParams = new URLSearchParams(window.location.search);
+        const sucesso = urlParams.get('sucesso');
+        const erro = urlParams.get('erro');
+        
+        const caixaMensagem = document.getElementById('caixa-mensagem');
+        const popup = document.getElementById('popup-sucesso');
+        const textoPopup = document.getElementById('texto-popup');
+
+        if (sucesso == 'cadastro_realizado') {
+            textoPopup.innerText = 'Cadastro efetuado com sucesso! Digite seu e-mail e senha para efetuar o login.';
+            popup.style.display = 'flex';
+        } else if (sucesso == 'senha_atualizada') { 
+            textoPopup.innerText = 'Redefinição efetuada com sucesso! Digite seu e-mail e sua nova senha para efetuar o login.';
+            popup.style.display = 'flex';
+        }
+
+        if (erro == 'credenciais_invalidas') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'E-mail ou senha incorretos. Verifique e tente novamente.';
+        } else if (erro == 'login_necessario') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Por favor, faça login para acessar o sistema.';
+        }
+
+        function fecharPopup() {
+            popup.style.display = 'none';
+        }
+
+        if (window.history.replaceState) {
+            const urlLimpa = new URL(window.location);
+            urlLimpa.searchParams.delete('erro');
+            urlLimpa.searchParams.delete('sucesso');
+            window.history.replaceState(null, '', urlLimpa);
+        }
+
+        const campoEmail = document.querySelector('input[name="email"]');
+        const checkboxLembrar = document.getElementById('lembrar');
+        const formLogin = document.querySelector('form');
+
+        const emailSalvo = localStorage.getItem('cucaria_email_lembrar');
+        if (emailSalvo) {
+            campoEmail.value = emailSalvo;
+            checkboxLembrar.checked = true;
+        }
+
+        formLogin.addEventListener('submit', function() {
+            if (checkboxLembrar.checked) {
+                localStorage.setItem('cucaria_email_lembrar', campoEmail.value);
+            } else {
+                localStorage.removeItem('cucaria_email_lembrar');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
