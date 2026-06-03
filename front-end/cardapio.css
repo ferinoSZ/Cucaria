@@ -98,32 +98,6 @@ body {
     font-size: 0.75rem;
     font-weight: bold;
 }
-.cabecalho-acoes {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.botao-sair {
-    position: relative;
-    background: #b8697d;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.3rem;
-    transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.botao-sair:hover {
-    background: #a05a6e;
-    transform: scale(1.05);
-}
 
 .nav-adm {
     width: 100%;
