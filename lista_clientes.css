@@ -342,4 +342,37 @@ input:checked + .slider:before {
         width: 36px;
         height: 36px;
     }
+
+    .container th,
+    .container td {
+        padding: 13px 10px;
+        font-size: 0.96rem;
+    }
+
+    .container th:nth-child(1),
+    .container td:nth-child(1) {
+        width: 24%;
+    }
+
+    .container th:nth-child(2),
+    .container td:nth-child(2) {
+        width: 40%;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+        line-height: 1.2;
+    }
+
+    .container th:nth-child(3),
+    .container td:nth-child(3) {
+        width: 14%;
+    }
+
+    .container td:nth-child(2) {
+        white-space: normal;
+    }
+
+    .switch {
+        transform: scale(0.92);
+        transform-origin: center;
+    }
 }

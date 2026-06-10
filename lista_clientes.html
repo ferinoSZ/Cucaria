@@ -28,7 +28,7 @@
     <!-- NAV ADM (mesma estrutura do cardapio) -->
     <nav class="nav-adm" id="navAdm">
         <ul id="menu-adm">
-            <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+            <li><a href="pedidos.html"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
             <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
             <li><a href="cardapio.html"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
             <li><a href="lista_clientes.html" class="active"><i class="fa-solid fa-users"></i>Clientes</a></li>
@@ -86,7 +86,7 @@
             { id: 9, nome: "Rino", email: "rino@email.com", vip: true },
             { id: 10, nome: "Fabricio", email: "fabricio@email.com", vip: true }
         ];
-getElementById("tabela-clientes");
+    const tabela = document.getElementById("tabela-clientes");
     const modalConfirmacaoExclusaoCliente = document.getElementById("modalConfirmacaoExclusaoCliente");
     const modalClienteNome = document.getElementById("modalClienteNome");
     const modalClienteEmail = document.getElementById("modalClienteEmail");
