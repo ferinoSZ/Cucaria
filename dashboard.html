@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="dashboard.css">
     <title>Dashboard - Ama Cucaria</title>
 </head>
-<body>
+<body data-dashboard-api="">
     <header class="cabecalho">
         <div class="cabecalho-conteudo">
             <div class="logo-titulo">
@@ -30,29 +30,43 @@
         </ul>
     </nav>
 
-    <div class="valores">
-        <div class="faturamento">
-            <h2>Faturamento total:</h2>
-            <h1>R$10.000,00</h1>
-        </div>
+    <main class="dashboard-shell">
+        <section class="resumo-kpis" aria-label="Resumo financeiro">
+            <article class="kpi-card kpi-card--gross">
+                <p class="kpi-label">Lucro Bruto Total</p>
+                <strong class="kpi-value" id="kpiLucroBruto">R$ 29.500</strong>
+            </article>
 
-        <div class="custo-producao">
-            <h2>Custo de produção:</h2>
-            <h1>R$5.000,00</h1>
-        </div>
+            <article class="kpi-card kpi-card--costs">
+                <p class="kpi-label">Custos de Produção</p>
+                <strong class="kpi-value kpi-value--emphasis" id="kpiCustosProducao">R$ 12.200</strong>
+            </article>
 
-        <div class="lucro">
-            <h2>Lucro toal:</h2>
-            <h1>R$5.000,00</h1>
-        </div>
-    </div>
+            <article class="kpi-card kpi-card--net">
+                <p class="kpi-label">Lucro Líquido</p>
+                <strong class="kpi-value" id="kpiLucroLiquido">R$ 17.300</strong>
+            </article>
+        </section>
 
-    <div class="dashboard">
-        <h2>Visão mensal</h2>
-        <h3>Faturamento, Custo de produção e Lucro por mês</h3>
-    </div>
+        <section class="grafico-card" aria-labelledby="tituloGraficoDashboard">
+            <header class="grafico-header">
+                <div>
+                    <h2 id="tituloGraficoDashboard">Visão Mensal</h2>
+                    <p>Lucro bruto, custos e lucro líquido por mês</p>
+                </div>
+            </header>
+
+            <div class="grafico-canvas-wrapper">
+                <canvas id="dashboardChart" aria-label="Gráfico mensal financeiro" role="img"></canvas>
+            </div>
+
+            <div class="grafico-legenda" aria-label="Legenda do gráfico">
+                <span><i class="legenda-cor legenda-cor--gross"></i>Lucro Bruto</span>
+                <span><i class="legenda-cor legenda-cor--costs"></i>Custos</span>
+                <span><i class="legenda-cor legenda-cor--net"></i>Lucro Líquido</span>
+            </div>
+        </section>
+    </main>
 </body>
-<script>
-    const modoAdmAtivo = true;
-</script>
+<script src="dashboard.js"></script>
 </html>
