@@ -26,6 +26,10 @@ const mensagemCarrinhoVazio = document.getElementById('mensagemCarrinhoVazio');
 const botaoFecharCarrinho   = document.getElementById('botaoFecharCarrinho');
 const botaoFinalizarPedido  = document.getElementById('botaoFinalizarPedido');
 
+const modalPedidoConfirmado       = document.getElementById('modalPedidoConfirmado');
+const numeroPedidoConfirmado      = document.getElementById('numeroPedidoConfirmado');
+const botaoFecharPedidoConfirmado = document.getElementById('botaoFecharPedidoConfirmado');
+
 const modalEditarProduto       = document.getElementById('modalEditarProduto');
 const formEditarProduto        = document.getElementById('formEditarProduto');
 const editarIdProduto          = document.getElementById('editarIdProduto');
@@ -482,18 +486,10 @@ botaoFinalizarPedido.addEventListener('click', async () => {
         const resultado = await response.json();
 
         if (resultado.success) {
-            let mensagem = `🧾 Pedido ${resultado.numero}\n\n`;
-            carrinho.forEach(i => {
-                mensagem += `• ${i.nome} x${i.quantidade} - R$ ${(i.preco * i.quantidade).toFixed(2)}\n`;
-            });
-            mensagem += `\n💰 Total: R$ ${total.toFixed(2)}`;
-
-            const telefone = '5547984246239';
-            window.open(`https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`, '_blank');
-
             carrinho = [];
             atualizarCarrinho();
             fecharModalCarrinho();
+            mostrarPedidoConfirmado(resultado.numero);
         } else {
             alert('Erro ao finalizar pedido.');
         }
@@ -502,6 +498,19 @@ botaoFinalizarPedido.addEventListener('click', async () => {
         alert('Erro ao conectar com a API.');
     }
 });
+
+function mostrarPedidoConfirmado(numero) {
+    numeroPedidoConfirmado.textContent = numero;
+    modalPedidoConfirmado.classList.add('ativo');
+    modalPedidoConfirmado.setAttribute('aria-hidden', 'false');
+}
+
+function fecharModalPedidoConfirmado() {
+    modalPedidoConfirmado.classList.remove('ativo');
+    modalPedidoConfirmado.setAttribute('aria-hidden', 'true');
+}
+
+botaoFecharPedidoConfirmado.addEventListener('click', fecharModalPedidoConfirmado);
 
 botaoVerCardapio.addEventListener('click', irParaCardapio);
 botaoVoltar.addEventListener('click', voltarParaInicial);

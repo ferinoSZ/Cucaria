@@ -13,6 +13,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 require_once("../API/config.php");
 require_once("../API/produto.php");
+require_once("../API/upload_imagem.php");
 require_once("../back-end/sessao.php");
 
 sessao::iniciar();
@@ -29,28 +30,19 @@ switch ($method) {
         break;
 
     case 'POST':
+        if (!$isAdmin) {
+            http_response_code(403);
+            echo json_encode(["erro" => "Acesso negado"]);
+            exit;
+        }
+
         if (isset($_FILES['imagem']) && isset($_POST['acao']) && $_POST['acao'] === 'uploadImagem') {
-            $pasta = "../front-end/img/produtos/";
+            $resultado = UploadImagem::salvar($_FILES['imagem'], "../front-end/img/produtos/");
 
-            if (!is_dir($pasta)) {
-                mkdir($pasta, 0777, true);
-            }
-
-            $ext          = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
-            $permitidos   = ['jpg', 'jpeg', 'png', 'webp'];
-
-            if (!in_array($ext, $permitidos)) {
-                echo json_encode(["erro" => "Formato de imagem inválido."]);
-                exit;
-            }
-
-            $nomeArquivo    = uniqid("produto_") . "." . $ext;
-            $caminhoCompleto = $pasta . $nomeArquivo;
-
-            if (move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoCompleto)) {
-                echo json_encode(["imagem_url" => "img/produtos/" . $nomeArquivo]);
+            if (isset($resultado['erro'])) {
+                echo json_encode(["erro" => $resultado['erro']]);
             } else {
-                echo json_encode(["erro" => "Falha ao mover arquivo."]);
+                echo json_encode(["imagem_url" => "img/produtos/" . $resultado['nomeArquivo']]);
             }
             exit;
         }
@@ -81,18 +73,15 @@ switch ($method) {
         $descricao     = $_POST['descricao']     ?? '';
         $imagem_url    = '';
 
-        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
-            $pasta     = "../front-end/img/produtos/";
-            $ext       = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
-            $nomeArq   = uniqid("produto_") . "." . $ext;
-            $caminho   = $pasta . $nomeArq;
+        if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
+            $resultado = UploadImagem::salvar($_FILES['imagem'], "../front-end/img/produtos/");
 
-            if (!is_dir($pasta)) {
-                mkdir($pasta, 0777, true);
+            if (isset($resultado['erro'])) {
+                echo json_encode(["success" => false, "erro" => $resultado['erro']]);
+                exit;
             }
 
-            move_uploaded_file($_FILES['imagem']['tmp_name'], $caminho);
-            $imagem_url = "img/produtos/" . $nomeArq;
+            $imagem_url = "img/produtos/" . $resultado['nomeArquivo'];
         }
 
         $ok = Produto::cadastrar($conn, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url);
@@ -100,6 +89,12 @@ switch ($method) {
         break;
 
     case 'PUT':
+        if (!$isAdmin) {
+            http_response_code(403);
+            echo json_encode(["erro" => "Acesso negado"]);
+            exit;
+        }
+
         $ok = Produto::editar(
             $conn,
             $input['id'],
@@ -113,6 +108,12 @@ switch ($method) {
         break;
 
     case 'DELETE':
+        if (!$isAdmin) {
+            http_response_code(403);
+            echo json_encode(["erro" => "Acesso negado"]);
+            exit;
+        }
+
         $id = $_GET['id'] ?? null;
         if (!$id) { echo json_encode(["success" => false]); exit; }
         $ok = Produto::excluir($conn, $id);

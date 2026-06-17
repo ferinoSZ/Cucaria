@@ -22,7 +22,8 @@
 
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-        <form action="../API/processa_login.php" method="POST">
+        <form action="../API/processa_login.php" method="POST" id="formLogin">
+            <input type="hidden" name="csrf_token" id="csrf_token">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -71,6 +72,10 @@
     
 
 <script> 
+        fetch('../API/csrf_token.php', { credentials: 'include' })
+            .then(r => r.json())
+            .then(d => { document.getElementById('csrf_token').value = d.token; });
+
         const urlParams = new URLSearchParams(window.location.search);
         const sucesso = urlParams.get('sucesso');
         const erro = urlParams.get('erro');
@@ -93,6 +98,12 @@
         } else if (erro == 'login_necessario') {
             caixaMensagem.classList.add('erro');
             caixaMensagem.innerText = 'Por favor, faça login para acessar o sistema.';
+        } else if (erro == 'muitas_tentativas') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Muitas tentativas de login. Tente novamente em alguns minutos.';
+        } else if (erro == 'token_invalido') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Sessão expirada. Por favor, tente novamente.';
         }
 
         function fecharPopup() {

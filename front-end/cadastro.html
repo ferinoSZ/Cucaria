@@ -23,6 +23,7 @@
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
        <form action="../API/processa_cadastro.php" method="POST">
+            <input type="hidden" name="csrf_token" id="csrf_token">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -78,9 +79,13 @@
     </div>
 
     <script>
+        fetch('../API/csrf_token.php', { credentials: 'include' })
+            .then(r => r.json())
+            .then(d => { document.getElementById('csrf_token').value = d.token; });
+
         const urlParams = new URLSearchParams(window.location.search);
         const erro = urlParams.get('erro');
-        const sucesso = urlParams.get('sucesso'); 
+        const sucesso = urlParams.get('sucesso');
         const caixaMensagem = document.getElementById('caixa-mensagem');
 
         
@@ -90,6 +95,10 @@
                 caixaMensagem.innerText = 'As senhas digitadas não são iguais!';
             } else if (erro == 'email_em_uso') {
                 caixaMensagem.innerText = 'Este e-mail não pode ser cadastrado!';
+            } else if (erro == 'muitas_tentativas') {
+                caixaMensagem.innerText = 'Muitas tentativas de cadastro. Tente novamente em alguns minutos.';
+            } else if (erro == 'token_invalido') {
+                caixaMensagem.innerText = 'Sessão expirada. Por favor, tente novamente.';
             } else {
                 caixaMensagem.innerText = 'Ocorreu um erro no cadastro.';
             }
