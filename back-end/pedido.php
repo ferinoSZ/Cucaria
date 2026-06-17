@@ -12,7 +12,9 @@ class pedido {
         $stmt->execute();
         $pedido_id = $conn->insert_id;
         $numero = "#" . str_pad($pedido_id, 4, "0", STR_PAD_LEFT);
-        $conn->query("UPDATE pedidos SET numero = '$numero' WHERE id = $pedido_id");
+        $stmtNumero = $conn->prepare("UPDATE pedidos SET numero = ? WHERE id = ?");
+        $stmtNumero->bind_param("si", $numero, $pedido_id);
+        $stmtNumero->execute();
 
         foreach ($itens as $item) {
             $sql = "INSERT INTO itens_pedido 

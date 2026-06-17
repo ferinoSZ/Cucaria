@@ -1,15 +1,28 @@
 <?php
 
+require_once __DIR__ . '/env.php';
+
 class Telegram {
 
-    private static $token   = '';
-    private static $chat_id = '-5211488063';
+    private static function token() {
+        return env('TELEGRAM_TOKEN', '');
+    }
+
+    private static function chatId() {
+        return env('TELEGRAM_CHAT_ID', '');
+    }
 
     public static function enviarMensagem($texto) {
-        $url = "https://api.telegram.org/bot" . self::$token . "/sendMessage";
+        $token = self::token();
+        if ($token === '') {
+            error_log('Telegram: TELEGRAM_TOKEN nao configurado.');
+            return null;
+        }
+
+        $url = "https://api.telegram.org/bot" . $token . "/sendMessage";
 
         $params = http_build_query([
-            'chat_id'    => self::$chat_id,
+            'chat_id'    => self::chatId(),
             'text'       => $texto,
             'parse_mode' => 'Markdown'
         ]);

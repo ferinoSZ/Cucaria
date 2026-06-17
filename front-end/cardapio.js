@@ -48,6 +48,12 @@ const API_URL        = '../back-end/produtos.php';
 const API_PEDIDOS    = '../API/pedidos.php';
 const API_SESSAO     = '../back-end/sessao_status.php';
 
+function escapeHtml(texto) {
+    const div = document.createElement('div');
+    div.textContent = texto ?? '';
+    return div.innerHTML;
+}
+
 async function verificarSessao() {
     try {
         const response = await fetch(API_SESSAO, { credentials: 'include' });
@@ -133,7 +139,7 @@ function renderizarProdutos() {
         cartao.innerHTML = `
             <div class="imagem-produto">
                 ${imgSrc
-                    ? `<img src="${imgSrc}" alt="${produto.nome}" style="width:100%;height:100%;object-fit:cover;">`
+                    ? `<img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(produto.nome)}" style="width:100%;height:100%;object-fit:cover;">`
                     : `<i class="bi bi-image"></i>`
                 }
                 ${cracha}
@@ -143,8 +149,8 @@ function renderizarProdutos() {
                 </button>
             </div>
             <div class="informacoes-produto">
-                <h3 class="nome-produto">${produto.nome}</h3>
-                <p class="descricao-produto">${produto.descricao}</p>
+                <h3 class="nome-produto">${escapeHtml(produto.nome)}</h3>
+                <p class="descricao-produto">${escapeHtml(produto.descricao)}</p>
                 <p class="rotulo-preco-produto">PREÇO</p>
                 <p class="preco-produto">R$ ${produto.preco.toFixed(2)}</p>
                 <div class="acoes-produto">
@@ -409,7 +415,7 @@ function renderizarCarrinho() {
         listaCarrinho.insertAdjacentHTML('beforeend', `
             <div class="item-carrinho">
                 <div class="info-item">
-                    <h4>${item.nome}</h4>
+                    <h4>${escapeHtml(item.nome)}</h4>
                     <p class="preco-item">R$ ${item.preco.toFixed(2)} x ${item.quantidade}</p>
                 </div>
                 <div class="acoes-item">
