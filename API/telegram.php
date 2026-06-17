@@ -2,7 +2,7 @@
 
 class Telegram {
 
-    private static $token   = '';
+    private static $token   = '8864152316:AAFBFyc-I7HscefuoBgY2TRkHSWBKUsRQBc';
     private static $chat_id = '-5211488063';
 
     public static function enviarMensagem($texto) {
