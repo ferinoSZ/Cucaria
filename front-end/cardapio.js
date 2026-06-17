@@ -15,6 +15,7 @@ const modalDescricaoProduto    = document.getElementById('modalDescricaoProduto'
 const modalCancelarExclusao    = document.getElementById('modalCancelarExclusao');
 const modalConfirmarExclusao   = document.getElementById('modalConfirmarExclusao');
 
+const botaoSair = document.getElementById('botaoSair');
 const botaoCarrinho         = document.getElementById('botaoCarrinho');
 const contadorCarrinho      = document.getElementById('contadorCarrinho');
 const modalCarrinho         = document.getElementById('modalCarrinho');
@@ -80,6 +81,7 @@ function atualizarVisibilidadeAcoesAdm() {
         b.style.display = modoAdmAtivo ? 'flex' : 'none';
     });
     botaoCarrinho.style.display = !modoAdmAtivo ? 'flex' : 'none';
+    botaoSair.style.display     = !modoAdmAtivo ? 'flex' : 'none';
 }
 
 async function carregarProdutos() {
@@ -125,20 +127,16 @@ function renderizarProdutos() {
         const classeEstoque = produto.emEstoque ? 'Esgotado' : 'Disponivel';
 
         const imgSrc = produto.imagem_url
-        ? produto.imagem_url
-        : '';
+            ? `../front-end/${produto.imagem_url}`
+            : '';
 
         cartao.innerHTML = `
             <div class="imagem-produto">
                 ${imgSrc
-                    ? `<img src="${imgSrc}" alt="${produto.nome}" style="width:100%;height:100%;object-fit:cover;">`
+                    ? `<img src="${imgSrc}" alt="${produto.nome}">`
                     : `<i class="bi bi-image"></i>`
                 }
                 ${cracha}
-                <button class="botao-excluir-icone" data-produto-id="${produto.id}"
-                    style="display:${modoAdmAtivo ? 'flex' : 'none'}" title="Excluir produto">
-                    <i class="bi bi-trash3-fill"></i>
-                </button>
             </div>
             <div class="informacoes-produto">
                 <h3 class="nome-produto">${produto.nome}</h3>
@@ -154,11 +152,15 @@ function renderizarProdutos() {
                         style="display:${modoAdmAtivo ? 'flex' : 'none'}">
                         <i class="fa-solid fa-pen"></i> Editar
                     </button>
+                    <button class="botao-excluir"
+                        style="display:${modoAdmAtivo ? 'flex' : 'none'}; gap:6px;">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </button>
                     ${!modoAdmAtivo
                         ? `<button class="botao-adicionar-carrinho"
-                            ${!produto.emEstoque ? 'disabled' : ''}>
-                            <i class="fa-solid fa-cart-plus"></i> ${produto.emEstoque ? 'Adicionar' : 'Esgotado'}
-                        </button>`
+                               ${!produto.emEstoque ? 'disabled' : ''}>
+                               <i class="fa-solid fa-cart-plus"></i> ${produto.emEstoque ? 'Adicionar' : 'Esgotado'}
+                           </button>`
                         : ''
                     }
                 </div>
@@ -171,7 +173,7 @@ function renderizarProdutos() {
         cartao.querySelector('.botao-editar')
             .addEventListener('click', () => abrirModalEdicao(produto));
 
-        cartao.querySelector('.botao-excluir-icone')
+        cartao.querySelector('.botao-excluir')
             .addEventListener('click', () => excluirProduto(produto.id));
 
         const btnCarrinho = cartao.querySelector('.botao-adicionar-carrinho');
@@ -521,4 +523,8 @@ modalEditarProduto.addEventListener('click', e => {
 window.addEventListener('load', async () => {
     await verificarSessao();
     await carregarProdutos();
+});
+botaoSair.addEventListener('click', async () => {
+    await fetch('../API/logout.php', { credentials: 'include' });
+    window.location.href = 'login.html';
 });
