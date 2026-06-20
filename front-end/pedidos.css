@@ -66,6 +66,32 @@ body {
     margin: 2px 0 0 0;
 }
 
+.cabecalho-acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.botao-sair {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #e0d6ce;
+    color: #6a4f4f;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.3s;
+}
+
+.botao-sair:hover {
+    background: #c77d8b;
+    color: white;
+}
+
 .nav-adm {
     width: 100%;
     background-color: #f3efe6;
@@ -157,6 +183,13 @@ body {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
+}
+
+.mensagem-vazio-pedidos {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: #9a8a82;
+    padding: 24px;
 }
 
 .total-data-e-sabor{
@@ -381,6 +414,14 @@ body {
     font-weight: 700;
     white-space: nowrap;
 }
+.pedido-header .status.status-aprovado {
+    background: #cdebd2;
+    color: #2f7a40;
+}
+.pedido-header .status.status-recusado {
+    background: #f3d2cf;
+    color: #a13d33;
+}
 .pedido-detalhes {
     display: flex;
     flex-direction: column;
@@ -420,16 +461,21 @@ body {
 }
 .pedido-acao {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
-.pedido .botao-aceitar, .pedido .botao-recusar {
-    flex: 1;
-    padding: 11px 12px;
+.pedido .botao-aceitar,
+.pedido .botao-recusar,
+.pedido .botao-pago,
+.pedido .botao-remover {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 110px;
+    padding: 10px 12px;
     border: none;
     border-radius: 10px;
     font-weight: bold;
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     cursor: pointer;
     transition: 0.3s;
     display: inline-flex;
@@ -438,12 +484,18 @@ body {
     gap: 8px;
 }
 
+.pedido .botao-aceitar:disabled,
+.pedido .botao-recusar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .pedido .botao-aceitar {
     background: #4ea55e;
     color: white;
 }
 
-.pedido .botao-aceitar:hover {
+.pedido .botao-aceitar:hover:not(:disabled) {
     background: #42914f;
 }
 
@@ -452,35 +504,31 @@ body {
     color: white;
 }
 
-.pedido .botao-recusar:hover {
+.pedido .botao-recusar:hover:not(:disabled) {
     background: #a94038;
 }
 
-.data-e-sabor {
-    width: min(100%, 340px);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    color: #7f7066;
-    padding: 14px;
-    background: #fbf7f1;
-    border-radius: 16px;
-    border: 1px solid #d8cec3;
-    box-shadow: 0 8px 18px rgba(78, 51, 51, 0.09);
+.pedido .botao-pago {
+    background: #e7dccf;
+    color: #6f5648;
 }
 
-.data-e-sabor h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #8a5c60;
-    font-size: 1rem;
-    font-weight: 700;
+.pedido .botao-pago:hover {
+    background: #dccdbb;
 }
 
-.data i {
-    font-size: 1rem;
-    color: #c88d8d;
+.pedido .botao-pago.ativo {
+    background: #cdebd2;
+    color: #2f7a40;
+}
+
+.pedido .botao-remover {
+    background: #9a8a82;
+    color: white;
+}
+
+.pedido .botao-remover:hover {
+    background: #847369;
 }
 
 @media (max-width: 1100px) {
@@ -502,4 +550,92 @@ body {
     .titulo-total-sabor {
         gap: 10px;
     }
+}
+
+/* ===== MODAL DE CONFIRMACAO ===== */
+.modal-confirmacao {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 45, 45, 0.45);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.modal-confirmacao.ativo {
+    display: flex;
+}
+
+.modal-confirmacao .modal-card {
+    background: #fbf7f1;
+    width: min(92vw, 420px);
+    padding: 24px;
+    border-radius: 16px;
+    border: 1px solid #d8cec3;
+    box-shadow: 0 12px 32px rgba(78, 51, 51, 0.2);
+}
+
+.modal-confirmacao h3 {
+    color: #b87082;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+}
+
+.modal-confirmacao .modal-texto {
+    color: #6f5648;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+}
+
+.modal-confirmacao .modal-acoes {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-confirmacao .modal-botao {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.modal-confirmacao .modal-botao-cancelar {
+    background: #e7dccf;
+    color: #6f5648;
+}
+
+.modal-confirmacao .modal-botao-cancelar:hover {
+    background: #dccdbb;
+}
+
+.modal-confirmacao .modal-botao-confirmar {
+    background: #c77d8b;
+    color: white;
+}
+
+.modal-confirmacao .modal-botao-confirmar:hover {
+    background: #b3697a;
+}
+
+/* Itens dos totalizadores clicáveis (filtro) */
+.item-filtravel {
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.item-filtravel:hover {
+    border-color: #c88d8d;
+}
+
+.item-filtravel.ativo {
+    border-color: #c77d8b;
+    background: #f7e7ea;
+    box-shadow: 0 0 0 2px rgba(199, 125, 139, 0.25);
 }

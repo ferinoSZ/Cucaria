@@ -116,7 +116,8 @@ body {
 }
 
 .container input,
-.container textarea {
+.container textarea,
+.container select {
     width: 100%;
     padding: 12px 14px;
     margin-top: 6px;
@@ -124,11 +125,13 @@ body {
     border: 1px solid #d0c7ba;
     background: #ece6dc;
     font-size: 1rem;
+    color: #333;
     transition: border-color 0.3s;
 }
 
 input:focus,
-textarea:focus {
+textarea:focus,
+.container select:focus {
     border-color: #b87082;
     outline: none;
 }

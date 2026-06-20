@@ -1,7 +1,7 @@
 <?php
 class usuario {   
     public static function autenticar($conn, $email, $senha) {   
-        $sql = "SELECT id, nome, email, senha, perfil, cliente_vip FROM usuarios WHERE email = ?";
+        $sql = "SELECT id, nome, email, senha, perfil, cliente_vip, token_sessao FROM usuarios WHERE email = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $email);
         $stmt->execute();
@@ -16,6 +16,12 @@ class usuario {
             }
         }
         return false;
+    }
+
+    public static function definirTokenSessao($conn, $id, $token) {
+        $stmt = $conn->prepare("UPDATE usuarios SET token_sessao = ? WHERE id = ?");
+        $stmt->bind_param("si", $token, $id);
+        return $stmt->execute();
     }
 
     public static function cadastrar($conn, $nome, $email, $senhaHash, $perfil = 'cliente') {

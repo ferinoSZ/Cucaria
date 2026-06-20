@@ -22,7 +22,8 @@
 
         <div id="caixa-mensagem" class="mensagem-alerta"></div>
 
-        <form action="../API/processa_login.php" method="POST">
+        <form action="../API/processa_login.php" method="POST" id="formLogin">
+            <input type="hidden" name="csrf_token" id="csrf_token">
             <div class="form-grid">
 
                 <div class="input-group full-width">
@@ -70,7 +71,12 @@
 
     
 
-<script> 
+<script src="confirmar.js"></script>
+<script>
+        fetch('../API/csrf_token.php', { credentials: 'include' })
+            .then(r => r.json())
+            .then(d => { document.getElementById('csrf_token').value = d.token; });
+
         const urlParams = new URLSearchParams(window.location.search);
         const sucesso = urlParams.get('sucesso');
         const erro = urlParams.get('erro');
@@ -93,6 +99,12 @@
         } else if (erro == 'login_necessario') {
             caixaMensagem.classList.add('erro');
             caixaMensagem.innerText = 'Por favor, faça login para acessar o sistema.';
+        } else if (erro == 'muitas_tentativas') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Muitas tentativas de login. Tente novamente em alguns minutos.';
+        } else if (erro == 'token_invalido') {
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = 'Sessão expirada. Por favor, tente novamente.';
         }
 
         function fecharPopup() {
@@ -116,12 +128,69 @@
             checkboxLembrar.checked = true;
         }
 
-        formLogin.addEventListener('submit', function() {
+        const campoSenha = document.querySelector('input[name="senha"]');
+
+        function mostrarErro(erro) {
+            const mensagens = {
+                credenciais_invalidas: 'E-mail ou senha incorretos. Verifique e tente novamente.',
+                muitas_tentativas: 'Muitas tentativas de login. Tente novamente em alguns minutos.',
+                token_invalido: 'Sessão expirada. Recarregue a página e tente novamente.',
+                conexao: 'Erro de conexão. Tente novamente.'
+            };
+            caixaMensagem.classList.add('erro');
+            caixaMensagem.innerText = mensagens[erro] || 'Não foi possível fazer login.';
+        }
+
+        async function enviarLogin(forcar) {
+            const dados = new URLSearchParams();
+            dados.append('email', campoEmail.value.trim());
+            dados.append('senha', campoSenha.value);
+            dados.append('csrf_token', document.getElementById('csrf_token').value);
+            if (forcar) dados.append('forcar', '1');
+
+            try {
+                const resposta = await fetch('../API/processa_login.php', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: dados.toString()
+                });
+                const res = await resposta.json();
+
+                if (res.ok) {
+                    window.location.href = res.redirect;
+                    return;
+                }
+
+                if (res.status === 'ja_conectado') {
+                    confirmarAcao(
+                        'Usuário conectado',
+                        'Este usuário já está conectado em outro dispositivo. Deseja desconectar a outra sessão e entrar aqui?',
+                        () => enviarLogin(true)
+                    );
+                    return;
+                }
+
+                mostrarErro(res.erro);
+            } catch (err) {
+                console.error('Erro ao fazer login:', err);
+                mostrarErro('conexao');
+            }
+        }
+
+        formLogin.addEventListener('submit', function(e) {
+            e.preventDefault();
+
             if (checkboxLembrar.checked) {
                 localStorage.setItem('cucaria_email_lembrar', campoEmail.value);
             } else {
                 localStorage.removeItem('cucaria_email_lembrar');
             }
+
+            caixaMensagem.classList.remove('erro');
+            caixaMensagem.innerText = '';
+
+            enviarLogin(false);
         });
     </script>
 

@@ -2,8 +2,24 @@
 
 require_once '../API/config.php';
 require_once '../API/usuario.php';
+require_once '../API/rate_limiter.php';
+require_once '../API/csrf.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") { 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!Csrf::validar($_POST['csrf_token'] ?? '')) {
+        header("Location: ../front-end/cadastro.html?erro=token_invalido");
+        exit();
+    }
+
+    $chaveLimite = 'cadastro_' . $_SERVER['REMOTE_ADDR'];
+
+    if (RateLimiter::bloqueado($chaveLimite)) {
+        header("Location: ../front-end/cadastro.html?erro=muitas_tentativas");
+        exit();
+    }
+
+    RateLimiter::registrarFalha($chaveLimite);
+
     $nome = trim($_POST['nome']);
     $email = trim($_POST['email']);
     $senha = trim($_POST['senha']);

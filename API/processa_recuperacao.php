@@ -3,9 +3,25 @@
 require_once '../API/config.php';
 require_once '../API/usuario.php';
 require_once '../API/config_email.php';
+require_once '../API/rate_limiter.php';
+require_once '../API/csrf.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!Csrf::validar($_POST['csrf_token'] ?? '')) {
+        header("Location: ../front-end/esqueceu_senha.html?erro=token_invalido");
+        exit();
+    }
+
     $email = trim($_POST['email']);
+    $chaveLimite = 'recuperacao_' . $_SERVER['REMOTE_ADDR'] . '_' . $email;
+
+    if (RateLimiter::bloqueado($chaveLimite)) {
+        header("Location: ../front-end/esqueceu_senha.html?erro=muitas_tentativas");
+        exit();
+    }
+
+    RateLimiter::registrarFalha($chaveLimite);
+
     $token = usuario::gerarTokenRecuperacao($conn, $email);
 
     if ($token) {

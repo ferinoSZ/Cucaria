@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="cardapio.css">
     <link rel="stylesheet" href="controle_clientes.css">
+    <link rel="stylesheet" href="nav_adm.css">
+    <script src="guarda_admin.js"></script>
+    <script src="confirmar.js"></script>
+    <script src="sessao_guard.js"></script>
     <style>
         .painel-desconto {
             width: min(96vw, 720px);
@@ -143,13 +147,12 @@
         </div>
     </header>
     <nav class="nav-adm" id="navAdm">
-    
         <ul id="menu-adm">
-            <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
-            <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
+            <li><a href="pedidos.html"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+            <li><a href="dashboard.html"><i class="bi bi-graph-up"></i>Dashboard</a></li>
             <li><a href="cardapio.html"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
             <li><a href="controle_clientes.html" class="active"><i class="fa-solid fa-users"></i>Clientes</a></li>
-            <li><a href="login.html"><i class="bi bi-box-arrow-left"> Sair</i></a></li>
+            <li><a href="#" id="navSair"><i class="bi bi-box-arrow-right"></i>Sair</a></li>
         </ul>
     </nav>
 
@@ -283,6 +286,7 @@
                     headers:     { 'Content-Type': 'application/json' },
                     body:        JSON.stringify({ acao: 'salvarDesconto', desconto: valor })
                 });
+                if (tratarSessaoExpirada(resp)) return;
                 const dados = await resp.json();
                 mostrarFeedback(dados.sucesso ? 'Desconto salvo com sucesso!' : 'Erro ao salvar.', dados.sucesso);
             } catch (e) {
@@ -351,12 +355,13 @@
             clientesRenderizados = atualizar(clientesRenderizados);
 
             try {
-                await fetch(API_URL, {
+                const resp = await fetch(API_URL, {
                     method:      'POST',
                     credentials: 'include',
                     headers:     { 'Content-Type': 'application/json' },
                     body:        JSON.stringify({ acao: 'toggleVip', id, vip: novoVip })
                 });
+                if (tratarSessaoExpirada(resp)) return;
             } catch (erro) {
                 console.error('Erro ao atualizar VIP:', erro);
                 e.target.checked = !novoVip;
@@ -406,6 +411,7 @@
                     headers:     { 'Content-Type': 'application/json' },
                     body:        JSON.stringify({ acao: 'excluir', id: idParaExcluir })
                 });
+                if (tratarSessaoExpirada(resposta)) return;
                 const resultado = await resposta.json();
 
                 if (resultado.sucesso) {
@@ -422,6 +428,17 @@
         });
 
         document.addEventListener('DOMContentLoaded', carregarClientes);
+
+        const navSair = document.getElementById('navSair');
+        if (navSair) {
+            navSair.addEventListener('click', (e) => {
+                e.preventDefault();
+                confirmarAcao('Sair', 'Deseja realmente sair da sua conta?', async () => {
+                    await fetch('../API/logout.php', { credentials: 'include' });
+                    window.location.href = 'login.html';
+                });
+            });
+        }
     </script>
 
 </body>

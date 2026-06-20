@@ -5,7 +5,7 @@ require_once '../API/config.php';
 
 sessao::iniciar();
 
-if (sessao::estaLogado()) {
+if (sessao::tokenValido($conn)) {
     $isVip    = false;
     $desconto = 0;
 

@@ -1,19 +1,19 @@
 <?php
 
 class Produto {
-    public static function cadastrar($conn, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url) {
+    public static function cadastrar($conn, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $categoria_id) {
         try {
-            $sql = "INSERT INTO produtos (nome, preco_venda, preco_producao, descricao, imagem_url, ativo) 
-                    VALUES (?, ?, ?, ?, ?, 1)";
-            
+            $sql = "INSERT INTO produtos (nome, preco_venda, preco_producao, descricao, imagem_url, categoria_id, ativo)
+                    VALUES (?, ?, ?, ?, ?, ?, 1)";
+
             $stmt = $conn->prepare($sql);
-            
+
             if (!$stmt) {
                 error_log("Erro de sintaxe SQL: " . $conn->error);
                 return false;
             }
 
-            $stmt->bind_param("sddss", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url);
+            $stmt->bind_param("sddssi", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $categoria_id);
 
             $resultado = $stmt->execute();
             $stmt->close();
@@ -68,20 +68,20 @@ class Produto {
         }
     }
 
-    public static function editar($conn, $id, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url) {
+    public static function editar($conn, $id, $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $categoria_id) {
         try {
-            $sql = "UPDATE produtos 
-                    SET nome = ?, preco_venda = ?, preco_producao = ?, descricao = ?, imagem_url = ?
+            $sql = "UPDATE produtos
+                    SET nome = ?, preco_venda = ?, preco_producao = ?, descricao = ?, imagem_url = ?, categoria_id = ?
                     WHERE id = ?";
-    
+
             $stmt = $conn->prepare($sql);
-    
+
             if (!$stmt) {
                 error_log("Erro SQL: " . $conn->error);
                 return false;
             }
-    
-            $stmt->bind_param("sddssi", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $id);
+
+            $stmt->bind_param("sddssii", $nome, $preco_venda, $preco_producao, $descricao, $imagem_url, $categoria_id, $id);
     
             $resultado = $stmt->execute();
             $stmt->close();

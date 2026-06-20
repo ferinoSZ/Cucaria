@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="cardapio.css">
+    <link rel="stylesheet" href="nav_adm.css">
 </head>
 
 <body>
@@ -21,6 +22,10 @@
                 </div>
             </div>
             <div class="cabecalho-acoes">
+                <button class="botao-sair" id="botaoMeusPedidos" title="Meus pedidos" style="display: none;"
+                    onclick="window.location.href='meus_pedidos.html'">
+                    <i class="fa-solid fa-clipboard-list"></i>
+                </button>
                 <button class="botao-carrinho" id="botaoCarrinho" title="Seu carrinho" style="display: none;">
                     <i class="fa-solid fa-shopping-cart"></i>
                     <span class="contador-carrinho" id="contadorCarrinho">0</span>
@@ -34,11 +39,11 @@
 
     <nav class="nav-adm" id="navAdm" style="display: none;">
         <ul id="menu-adm">
-            <li><a href="#pedidos"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
-            <li><a href="#dashboard"><i class="bi bi-graph-up"></i>Dashboard</a></li>
+            <li><a href="pedidos.html"><i class="fa-solid fa-clipboard-check"></i>Pedidos</a></li>
+            <li><a href="dashboard.html"><i class="bi bi-graph-up"></i>Dashboard</a></li>
             <li><a href="cardapio.html" class="active"><i class="fa-solid fa-utensils"></i>Cardápio</a></li>
             <li><a href="controle_clientes.html"><i class="fa-solid fa-users"></i>Clientes</a></li>
-            <li><a href="login.html"><i class="bi bi-box-arrow-left"> Sair</i></a></li>
+            <li><a href="#" id="navSair"><i class="bi bi-box-arrow-right"></i>Sair</a></li>
         </ul>
     </nav>
 
@@ -65,10 +70,17 @@
                     Cucas artesanais assadas no dia. Escolha sua favorita — disponibilidade atualizada em tempo real.
                 </p>
             </div>
-            <button class="botao-cadastrar" id="botaoCadastrar" onclick="window.location.href='cadastro_itens.html'">
-                + Cadastrar Produto
-            </button>
+            <div class="acoes-cardapio-adm">
+                <button class="botao-cadastrar" id="botaoCategorias" onclick="abrirModalCategorias()" style="display: none;">
+                    <i class="fa-solid fa-tags"></i> Categorias
+                </button>
+                <button class="botao-cadastrar" id="botaoCadastrar" onclick="window.location.href='cadastro_itens.html'">
+                    + Cadastrar Produto
+                </button>
+            </div>
         </section>
+
+        <div class="filtros-categoria" id="filtrosCategoria"></div>
 
         <div class="continer-produtos" id="continerProdutos"></div>
 
@@ -81,6 +93,47 @@
         <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloCarrinho">
             <h3 id="modalTituloCarrinho">Seu Carrinho</h3>
             <div id="listaCarrinho" class="lista-carrinho"></div>
+            <div class="form-grupo-carrinho" id="dadosEntregaCarrinho" style="display: none;">
+                <div class="form-grupo">
+                    <label for="telefoneContato">Telefone</label>
+                    <input type="tel" id="telefoneContato" placeholder="(00) 00000-0000" required>
+                </div>
+                <div class="form-grupo">
+                    <label>Como deseja receber?</label>
+                    <div class="opcoes-tipo-entrega">
+                        <label class="opcao-tipo-entrega">
+                            <input type="radio" name="tipoEntrega" value="retirada">
+                            <span>Retirar no local</span>
+                        </label>
+                        <label class="opcao-tipo-entrega">
+                            <input type="radio" name="tipoEntrega" value="entrega">
+                            <span>Entrega</span>
+                        </label>
+                    </div>
+                </div>
+                <div id="grupoEndereco" style="display: none;">
+                    <div class="form-grupo">
+                        <label for="enderecoEntrega">Endereço de entrega</label>
+                        <input type="text" id="enderecoEntrega" placeholder="Rua, número, bairro">
+                    </div>
+                    <div class="form-grupo">
+                        <label for="pontoReferencia">Ponto de referência (opcional)</label>
+                        <input type="text" id="pontoReferencia" placeholder="Ex: próximo ao mercado X">
+                    </div>
+                </div>
+                <div class="form-grupo">
+                    <label for="dataEntrega">Data e hora desejada</label>
+                    <input type="datetime-local" id="dataEntrega" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="formaPagamento">Forma de pagamento</label>
+                    <select id="formaPagamento" required>
+                        <option value="" disabled selected>Selecione</option>
+                        <option value="dinheiro">Dinheiro</option>
+                        <option value="pix">Pix</option>
+                    </select>
+                </div>
+            </div>
             <div class="modal-carrinho-resumo" id="resumoCarrinho" style="display: none;">
                 <p><strong>Total:</strong> <span id="totalCarrinho">R$ 0,00</span></p>
             </div>
@@ -88,6 +141,17 @@
             <div class="modal-acoes">
                 <button type="button" class="modal-botao modal-botao-cancelar" id="botaoFecharCarrinho">Fechar</button>
                 <button type="button" class="modal-botao modal-botao-confirmar" id="botaoFinalizarPedido" style="display: none;">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-confirmacao" id="modalPedidoConfirmado" aria-hidden="true">
+        <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTituloPedidoConfirmado">
+            <h3 id="modalTituloPedidoConfirmado"><i class="fa-solid fa-circle-check"></i> Pedido realizado!</h3>
+            <p class="modal-texto">Seu pedido <strong id="numeroPedidoConfirmado"></strong> foi enviado com sucesso.</p>
+            <p class="modal-texto">Em breve entraremos em contato para confirmar os detalhes.</p>
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-confirmar" id="botaoFecharPedidoConfirmado">Voltar ao cardápio</button>
             </div>
         </div>
     </div>
@@ -115,6 +179,10 @@
                 <div class="form-grupo">
                     <label for="editarNomeProduto">Nome do Produto</label>
                     <input type="text" id="editarNomeProduto" placeholder="Ex: Dois Amores" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="editarCategoria">Categoria</label>
+                    <select id="editarCategoria" required></select>
                 </div>
                 <div class="form-grupo">
                     <label for="editarDescricaoProduto">Descrição</label>
@@ -153,6 +221,28 @@
         </div>
     </div>
 
+    <div class="modal-confirmacao" id="modalCategorias" aria-hidden="true">
+        <div class="modal-card modal-card-editar" role="dialog" aria-modal="true" aria-labelledby="modalTituloCategorias">
+            <h3 id="modalTituloCategorias"><i class="fa-solid fa-tags"></i> Categorias</h3>
+
+            <div class="form-grupo nova-categoria">
+                <label for="novaCategoria">Nova categoria</label>
+                <div class="linha-nova-categoria">
+                    <input type="text" id="novaCategoria" placeholder="Ex: Bolos">
+                    <button type="button" class="modal-botao modal-botao-confirmar" id="botaoAdicionarCategoria">Adicionar</button>
+                </div>
+            </div>
+
+            <div class="lista-categorias" id="listaCategorias"></div>
+
+            <div class="modal-acoes">
+                <button type="button" class="modal-botao modal-botao-cancelar" id="botaoFecharCategorias">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="confirmar.js"></script>
+    <script src="sessao_guard.js"></script>
     <script src="cardapio.js"></script>
 </body>
 </html>

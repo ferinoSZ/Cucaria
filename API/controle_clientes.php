@@ -6,7 +6,7 @@ require_once '../back-end/sessao.php';
 
 sessao::iniciar();
 
-if (!isset($_SESSION['usuario_perfil']) || $_SESSION['usuario_perfil'] !== 'admin') {
+if (!sessao::tokenValido($conn) || $_SESSION['usuario_perfil'] !== 'admin') {
     echo json_encode(['erro' => 'Acesso negado']);
     exit;
 }

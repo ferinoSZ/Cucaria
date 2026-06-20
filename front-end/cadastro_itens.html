@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cucaria</title>
+    <script src="guarda_admin.js"></script>
 </head>
 
 <body>
@@ -61,6 +62,16 @@
                         required>
                 </div>
 
+                <div class="campo">
+                    <label for="categoria">
+                        <i class="bi bi-tags-fill"></i>
+                        Categoria*
+                    </label>
+                    <select id="categoria" name="categoria_id" required>
+                        <option value="" disabled selected>Selecione</option>
+                    </select>
+                </div>
+
                 <div class="campo full">
                     <label for="descricao">
                         <i class="bi bi-file-earmark-text-fill"></i>
@@ -87,9 +98,23 @@
     </div>
 <script>
 const API_URL = "http://localhost/Cucaria/back-end/produtos.php";
+const API_CATEGORIAS = "http://localhost/Cucaria/back-end/categorias.php";
 
 const form = document.querySelector('form');
+const categoriaInput = document.getElementById('categoria');
 const nomeInput = document.getElementById('nome');
+
+async function carregarCategorias() {
+    try {
+        const resposta = await fetch(API_CATEGORIAS, { credentials: 'include' });
+        const categorias = await resposta.json();
+        categoriaInput.innerHTML = '<option value="" disabled selected>Selecione</option>' +
+            categorias.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+    } catch (erro) {
+        console.error('Erro ao carregar categorias:', erro);
+    }
+}
+carregarCategorias();
 const precoInput = document.getElementById('preco');
 const precoProducaoInput = document.getElementById('preco_producao');
 const descricaoInput = document.getElementById('descricao');
@@ -123,7 +148,13 @@ form.addEventListener('submit', async function (event) {
     const descricao = descricaoInput.value.trim();
     const preco = Number(precoInput.value);
     const precoProducao = Number(precoProducaoInput.value);
+    const categoriaId = categoriaInput.value;
     const imagemArquivo = imagemInput.files[0];
+
+    if (!categoriaId) {
+        alert('Selecione uma categoria.');
+        return;
+    }
 
     try {
         const formData = new FormData();
@@ -132,6 +163,7 @@ form.addEventListener('submit', async function (event) {
         formData.append("preco_venda", preco);
         formData.append("preco_producao", precoProducao);
         formData.append("descricao", descricao);
+        formData.append("categoria_id", categoriaId);
 
         if (imagemArquivo) {
             formData.append("imagem", imagemArquivo); 
