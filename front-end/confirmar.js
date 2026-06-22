@@ -1,5 +1,3 @@
-// Modal de confirmação reutilizável.
-// Uso: confirmarAcao('Título', 'Mensagem', () => { ...ação... });
 (function () {
     const style = document.createElement('style');
     style.textContent = `
